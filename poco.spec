@@ -1,7 +1,11 @@
 
+%define poco_src_version 1.3.6p1
+%define poco_doc_version 1.3.6
+%define poco_rpm_release 1
+
 Name:             poco
-Version:          1.3.5
-Release:          8%{?dist}
+Version:          %{poco_src_version}
+Release:          %{poco_rpm_release}%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -9,11 +13,11 @@ License:          Boost
 URL:              http://pocoproject.org
 
 Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
-Source1:          http://downloads.sourceforge.net/poco/poco-%{version}-doc.tar.gz
+Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
 
 # This patch updates makefiles and sources in order to exclude the 
 # bundled versions of the system libraries from the build process.
-Patch0:           poco-1.3.5-syslibs.patch
+Patch0:           poco-1.3.6p1-syslibs.patch
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -34,11 +38,11 @@ including the standard library.
 
 %prep
 %setup -q -n poco-%{version}-all -a1
-/bin/chmod -R a-x+X poco-%{version}-doc
+/bin/chmod -R a-x+X poco-%{poco_doc_version}-all-doc
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
-rm -f Crypto/include/Poco/.*DS_Store
+/bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
 rm -f Foundation/src/MSG00001.bin
 %patch0 -p1 -b .orig
 rm -f Foundation/include/Poco/zconf.h
@@ -87,7 +91,7 @@ rm -f XML/src/xmltok_impl.h
 rm -f XML/src/xmltok_ns.c
 
 %build
-%configure --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
+%configure --unbundled --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
 make %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -273,6 +277,18 @@ class libraries for network-centric applications.)
 %defattr(-, root, root, -)
 %{_libdir}/libPocoZip.so.*
 
+%package          pagecompiler
+Summary:          The PageCompiler POCO component
+Group:            System Environment/Libraries
+
+%description pagecompiler
+This package contains the PageCompiler component of POCO. (POCO is a 
+set of C++ class libraries for network-centric applications.)
+
+%files pagecompiler
+%defattr(-, root, root, -)
+%{_bindir}/cpspc
+
 %package          debug
 Summary:          Debug builds of the POCO libraries
 Group:            Development/Libraries
@@ -298,6 +314,7 @@ application testing purposes.
 %{_libdir}/libPocoODBCd.so.*
 %{_libdir}/libPocoMySQLd.so.*
 %{_libdir}/libPocoZipd.so.*
+%{_bindir}/cpspcd
 
 %package          devel
 Summary:          Headers for developing programs that will use POCO
@@ -315,6 +332,7 @@ Requires:         poco-sqlite = %{version}-%{release}
 Requires:         poco-odbc = %{version}-%{release}
 Requires:         poco-mysql = %{version}-%{release}
 Requires:         poco-zip = %{version}-%{release}
+Requires:         poco-pagecompiler = %{version}-%{release}
 
 %description devel
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
@@ -369,9 +387,17 @@ HTML format.
 
 %files doc
 %defattr(-, root, root, -)
-%doc poco-%{version}-doc/*
+%doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Wed Dec 23 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p1-1
+- The package was upgraded for the use of POCO version 1.3.6p1.
+- A new binary package (poco-pagecompiler) is now produced by the 
+rpmbuild process.
+- The syslibs patch was considerably simplified (based on a new 
+"configure" script option which was introduced by POCO developers for 
+the maintainers of the POCO Debian package).
+
 * Tue Nov 17 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-8
 - The "make" invocation command in the %%build section was modified to 
 skip premature symbol stripping from retail libraries.
