@@ -1,5 +1,5 @@
 
-%define poco_src_version 1.3.6p1
+%define poco_src_version 1.3.6p2
 %define poco_doc_version 1.3.6
 %define poco_rpm_release 1
 
@@ -390,6 +390,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Fri May 07 2010 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p2-1
+- The package was upgraded for the use of POCO version 1.3.6p2.
+
 * Wed Dec 23 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p1-1
 - The package was upgraded for the use of POCO version 1.3.6p1.
 - A new binary package (poco-pagecompiler) is now produced by the 
