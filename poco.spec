@@ -1,7 +1,10 @@
 
-%define poco_src_version 1.3.6p2
-%define poco_doc_version 1.3.6
-%define poco_rpm_release 1
+%global poco_src_version 1.3.6p2
+%global poco_doc_version 1.3.6
+%global poco_rpm_release 2
+
+%bcond_without tests
+%bcond_without samples
 
 Name:             poco
 Version:          %{poco_src_version}
@@ -43,6 +46,7 @@ including the standard library.
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
+/bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
 rm -f Foundation/src/MSG00001.bin
 %patch0 -p1 -b .orig
 rm -f Foundation/include/Poco/zconf.h
@@ -91,15 +95,26 @@ rm -f XML/src/xmltok_impl.h
 rm -f XML/src/xmltok_ns.c
 
 %build
-%configure --unbundled --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
+%if %{without tests}
+  %global poco_tests --no-tests
+%else
+  %global poco_tests --noop
+%endif
+%if %{without samples}
+  %global poco_samples --no-samples
+%else
+  %global poco_samples --noop
+%endif
+./configure --prefix=%{_prefix} --unbundled %poco_tests %poco_samples --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
 make %{?_smp_mflags} STRIP=/bin/true
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}
+rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %package          foundation
 Summary:          The Foundation POCO component
@@ -334,6 +349,9 @@ Requires:         poco-mysql = %{version}-%{release}
 Requires:         poco-zip = %{version}-%{release}
 Requires:         poco-pagecompiler = %{version}-%{release}
 
+Requires:         zlib-devel
+Requires:         expat-devel
+
 %description devel
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
 are open source C++ class libraries that simplify and accelerate the 
@@ -390,6 +408,10 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Wed Jun 02 2010 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p2-2
+- Missing dependencies on system header files were fixed.
+- Options were added to build POCO without tests and samples.
+
 * Fri May 07 2010 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p2-1
 - The package was upgraded for the use of POCO version 1.3.6p2.
 
