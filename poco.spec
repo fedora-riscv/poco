@@ -1,7 +1,7 @@
 
-%global poco_src_version 1.3.6p2
-%global poco_doc_version 1.3.6
-%global poco_rpm_release 2
+%global poco_src_version 1.4.0
+%global poco_doc_version 1.4.0
+%global poco_rpm_release 1
 
 %bcond_without tests
 %bcond_without samples
@@ -17,10 +17,6 @@ URL:              http://pocoproject.org
 
 Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
 Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
-
-# This patch updates makefiles and sources in order to exclude the 
-# bundled versions of the system libraries from the build process.
-Patch0:           poco-1.3.6p1-syslibs.patch
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -47,8 +43,8 @@ including the standard library.
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
 /bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
+/bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
 rm -f Foundation/src/MSG00001.bin
-%patch0 -p1 -b .orig
 rm -f Foundation/include/Poco/zconf.h
 rm -f Foundation/include/Poco/zlib.h
 rm -f Foundation/src/adler32.c
@@ -72,9 +68,21 @@ rm -f Foundation/src/zconf.h
 rm -f Foundation/src/zlib.h
 rm -f Foundation/src/zutil.c
 rm -f Foundation/src/zutil.h
-rm -f Foundation/src/pcre*
-rm -f Foundation/src/ucp.h
-rm -f Data/SQLite/src/sqlite3.*
+rm -f Foundation/src/pcre.h
+rm -f Foundation/src/pcre_chartables.c
+rm -f Foundation/src/pcre_compile.c
+rm -f Foundation/src/pcre_exec.c
+rm -f Foundation/src/pcre_fullinfo.c
+rm -f Foundation/src/pcre_globals.c
+rm -f Foundation/src/pcre_maketables.c
+rm -f Foundation/src/pcre_newline.c
+rm -f Foundation/src/pcre_ord2utf8.c
+rm -f Foundation/src/pcre_study.c
+rm -f Foundation/src/pcre_try_flipped.c
+rm -f Foundation/src/pcre_valid_utf8.c
+rm -f Foundation/src/pcre_xclass.c
+rm -f Data/SQLite/src/sqlite3.h
+rm -f Data/SQLite/src/sqlite3.c
 rm -f XML/include/Poco/XML/expat.h
 rm -f XML/include/Poco/XML/expat_external.h
 rm -f XML/src/ascii.h
@@ -303,6 +311,7 @@ set of C++ class libraries for network-centric applications.)
 %files pagecompiler
 %defattr(-, root, root, -)
 %{_bindir}/cpspc
+%{_bindir}/f2cpsp
 
 %package          debug
 Summary:          Debug builds of the POCO libraries
@@ -330,6 +339,7 @@ application testing purposes.
 %{_libdir}/libPocoMySQLd.so.*
 %{_libdir}/libPocoZipd.so.*
 %{_bindir}/cpspcd
+%{_bindir}/f2cpspd
 
 %package          devel
 Summary:          Headers for developing programs that will use POCO
@@ -408,6 +418,12 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Fri Jan 21 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.0-1
+- Updated for POCO 1.4.0. The "syslibs" patch was removed.
+- This release enables a small part of the PCRE library to be 
+compiled-in, which is unavoidable since POCO uses some internal PCRE 
+functions for Unicode classification and manipulation.
+
 * Wed Jun 02 2010 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p2-2
 - Missing dependencies on system header files were fixed.
 - Options were added to build POCO without tests and samples.
