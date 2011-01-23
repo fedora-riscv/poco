@@ -1,7 +1,7 @@
 
 Name:             poco
 Version:          1.3.5
-Release:          8%{?dist}
+Release:          9%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -315,6 +315,8 @@ Requires:         poco-sqlite = %{version}-%{release}
 Requires:         poco-odbc = %{version}-%{release}
 Requires:         poco-mysql = %{version}-%{release}
 Requires:         poco-zip = %{version}-%{release}
+# Required by /usr/include/Poco/XML/ParserEngine.h (#669708)
+Requires:         expat-devel
 
 %description devel
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
@@ -372,6 +374,9 @@ HTML format.
 %doc poco-%{version}-doc/*
 
 %changelog
+* Mon Jan 24 2011 Matěj Cepl <mcepl@redhat.com> - 1.3.5-9
+- Add expat-devel as a dependency of poco-devel (#669708)
+
 * Tue Nov 17 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-8
 - The "make" invocation command in the %%build section was modified to 
 skip premature symbol stripping from retail libraries.
