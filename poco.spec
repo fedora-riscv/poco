@@ -1,6 +1,6 @@
 
-%global poco_src_version 1.4.0
-%global poco_doc_version 1.4.0
+%global poco_src_version 1.4.1
+%global poco_doc_version 1.4.1
 %global poco_rpm_release 1
 
 %bcond_without tests
@@ -105,15 +105,11 @@ rm -f XML/src/xmltok_ns.c
 %build
 %if %{without tests}
   %global poco_tests --no-tests
-%else
-  %global poco_tests --noop
 %endif
 %if %{without samples}
   %global poco_samples --no-samples
-%else
-  %global poco_samples --noop
 %endif
-./configure --prefix=%{_prefix} --unbundled %poco_tests %poco_samples --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
+./configure --prefix=%{_prefix} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
 make %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -250,7 +246,7 @@ of C++ class libraries for network-centric applications.)
 
 %files sqlite
 %defattr(-, root, root, -)
-%{_libdir}/libPocoSQLite.so.*
+%{_libdir}/libPocoDataSQLite.so.*
 
 %package          odbc
 Summary:          The Data/ODBC POCO component
@@ -266,7 +262,7 @@ of C++ class libraries for network-centric applications.)
 
 %files odbc
 %defattr(-, root, root, -)
-%{_libdir}/libPocoODBC.so.*
+%{_libdir}/libPocoDataODBC.so.*
 
 %package          mysql
 Summary:          The Data/MySQL POCO component
@@ -282,7 +278,7 @@ of C++ class libraries for network-centric applications.)
 
 %files mysql
 %defattr(-, root, root, -)
-%{_libdir}/libPocoMySQL.so.*
+%{_libdir}/libPocoDataMySQL.so.*
 
 %package          zip
 Summary:          The Zip POCO component
@@ -334,9 +330,9 @@ application testing purposes.
 %{_libdir}/libPocoCryptod.so.*
 %{_libdir}/libPocoNetSSLd.so.*
 %{_libdir}/libPocoDatad.so.*
-%{_libdir}/libPocoSQLited.so.*
-%{_libdir}/libPocoODBCd.so.*
-%{_libdir}/libPocoMySQLd.so.*
+%{_libdir}/libPocoDataSQLited.so.*
+%{_libdir}/libPocoDataODBCd.so.*
+%{_libdir}/libPocoDataMySQLd.so.*
 %{_libdir}/libPocoZipd.so.*
 %{_bindir}/cpspcd
 %{_bindir}/f2cpspd
@@ -390,12 +386,12 @@ POCO applications.
 %{_libdir}/libPocoNetSSLd.so
 %{_libdir}/libPocoData.so
 %{_libdir}/libPocoDatad.so
-%{_libdir}/libPocoSQLite.so
-%{_libdir}/libPocoSQLited.so
-%{_libdir}/libPocoODBC.so
-%{_libdir}/libPocoODBCd.so
-%{_libdir}/libPocoMySQL.so
-%{_libdir}/libPocoMySQLd.so
+%{_libdir}/libPocoDataSQLite.so
+%{_libdir}/libPocoDataSQLited.so
+%{_libdir}/libPocoDataODBC.so
+%{_libdir}/libPocoDataODBCd.so
+%{_libdir}/libPocoDataMySQL.so
+%{_libdir}/libPocoDataMySQLd.so
 %{_libdir}/libPocoZip.so
 %{_libdir}/libPocoZipd.so
 
@@ -418,6 +414,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Tue Feb 01 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.1-1
+- Updated for POCO 1.4.1.
+
 * Fri Jan 21 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.0-1
 - Updated for POCO 1.4.0. The "syslibs" patch was removed.
 - This release enables a small part of the PCRE library to be 
