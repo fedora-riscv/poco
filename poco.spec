@@ -1,6 +1,6 @@
 
-%global poco_src_version 1.4.1
-%global poco_doc_version 1.4.1
+%global poco_src_version 1.4.1p1
+%global poco_doc_version 1.4.1p1
 %global poco_rpm_release 1
 
 %bcond_without tests
@@ -8,12 +8,12 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}.1
+Release:          %{poco_rpm_release}%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
 License:          Boost
-URL:              http://pocoproject.org
+URL:              http://www.pocoproject.org
 
 Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
 Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
@@ -414,6 +414,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Thu Feb 10 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.1p1-1
+- Updated for POCO 1.4.1p1.
+
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.1-1.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
