@@ -8,7 +8,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}
+Release:          %{poco_rpm_release}%{?dist}.1
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -414,6 +414,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Wed Mar 23 2011 Dan Horák <dan@danny.cz> - 1.4.1p1-1.1
+- rebuilt for mysql 5.5.10 (soname bump in libmysqlclient)
+
 * Thu Feb 10 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.1p1-1
 - Updated for POCO 1.4.1p1.
 
