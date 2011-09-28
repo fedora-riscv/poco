@@ -1,6 +1,6 @@
 
-%global poco_src_version 1.4.1p1
-%global poco_doc_version 1.4.1p1
+%global poco_src_version 1.4.2p1
+%global poco_doc_version 1.4.2p1
 %global poco_rpm_release 1
 
 %bcond_without tests
@@ -8,7 +8,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}.1
+Release:          %{poco_rpm_release}%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -17,8 +17,6 @@ URL:              http://www.pocoproject.org
 
 Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
 Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
-
-BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -113,12 +111,8 @@ rm -f XML/src/xmltok_ns.c
 make %{?_smp_mflags} STRIP=/bin/true
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
-
-%clean
-rm -rf %{buildroot}
 
 %package          foundation
 Summary:          The Foundation POCO component
@@ -414,6 +408,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Wed Sep 28 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.2p1-1
+- Updated for POCO 1.4.2p1. Obsoleted .spec directives were removed.
+
 * Wed Mar 23 2011 Dan Horák <dan@danny.cz> - 1.4.1p1-1.1
 - rebuilt for mysql 5.5.10 (soname bump in libmysqlclient)
 
