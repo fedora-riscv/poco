@@ -1,8 +1,13 @@
 %global poco_src_version 1.4.2p1
 %global poco_doc_version 1.4.2p1
-%global poco_rpm_release 1
+%global poco_rpm_release 2
 
+# build without tests on s390 (runs out of memory during linking due the 2 GB address space)
+%ifnarch s390
 %bcond_without tests
+%else
+%bcond_with tests
+%endif
 %bcond_without samples
 
 Name:             poco
@@ -407,6 +412,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Sun Dec 18 2011 Dan Horák <dan@danny.cz> - 1.4.p1-2
+- build without tests on s390
+
 * Wed Sep 28 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.2p1-1
 - Updated for POCO 1.4.2p1. Obsoleted .spec directives were removed.
 
