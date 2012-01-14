@@ -13,7 +13,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}
+Release:          %{poco_rpm_release}%{?dist}.1
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -413,6 +413,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Sun Dec 18 2011 Dan Horák <dan@danny.cz> - 1.4.p1-2
 - build without tests on s390
 
