@@ -13,7 +13,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}.6
+Release:          %{poco_rpm_release}%{?dist}.7
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -22,6 +22,8 @@ URL:              http://www.pocoproject.org
 
 Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
 Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
+# upstream commit 37899ed, shipped in 1.5.2-rc2
+Patch0:           poco-aarch64.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -40,6 +42,7 @@ including the standard library.
 
 %prep
 %setup -q -n poco-%{version}-all -a1
+%patch0 -p1
 /bin/chmod -R a-x+X poco-%{poco_doc_version}-all-doc
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -413,6 +416,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Tue Jul 08 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 1.4.2p1-2.7
+- Add support for AArch64
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
