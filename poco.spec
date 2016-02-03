@@ -1,8 +1,3 @@
-
-%global poco_src_version 1.4.2p1
-%global poco_doc_version 1.4.2p1
-%global poco_rpm_release 2
-
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
 %bcond_without tests
@@ -12,18 +7,24 @@
 %bcond_without samples
 
 Name:             poco
-Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}.10
+Version:          1.6.1
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
 License:          Boost
-URL:              http://www.pocoproject.org
+URL:              http://pocoproject.org
 
-Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
-Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
-# upstream commit 37899ed, shipped in 1.5.2-rc2
-Patch0:           poco-aarch64.patch
+Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
+
+# Adapted from upstream commit 94bb16f
+Patch0:           fix-pcre-conflicting-definitions.patch
+# From buildroot project, see patch
+Patch1:           fix-unbundled-pcre-usage.patch
+# Some of the samples need to link with the JSON library
+Patch2:           samples-link-json.patch
+# Disable the tests that will fail under Koji (mostly network)
+Patch3:           disable-tests.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -32,6 +33,12 @@ BuildRequires:    zlib-devel
 BuildRequires:    pcre-devel
 BuildRequires:    sqlite-devel
 BuildRequires:    expat-devel
+BuildRequires:    libtool-ltdl-devel
+
+# We build poco to unbundle as much as possible, but unfortunately, it uses
+# some internal functions of pcre so there are a few files from pcre that are
+# still bundled.  See https://github.com/pocoproject/poco/issues/120.
+Provides:         bundled(pcre) = 8.35
 
 %description
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
@@ -41,9 +48,11 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-%setup -q -n poco-%{version}-all -a1
+%setup -q -n poco-%{version}-all
 %patch0 -p1
-/bin/chmod -R a-x+X poco-%{poco_doc_version}-all-doc
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
@@ -59,6 +68,7 @@ rm -f Foundation/src/crc32.c
 rm -f Foundation/src/crc32.h
 rm -f Foundation/src/deflate.c
 rm -f Foundation/src/deflate.h
+rm -f Foundation/src/gzguts.h
 rm -f Foundation/src/gzio.c
 rm -f Foundation/src/infback.c
 rm -f Foundation/src/inffast.c
@@ -74,18 +84,27 @@ rm -f Foundation/src/zconf.h
 rm -f Foundation/src/zlib.h
 rm -f Foundation/src/zutil.c
 rm -f Foundation/src/zutil.h
-rm -f Foundation/src/pcre.h
+# PCRE files that can't be removed due to still being bundled:
+#   pcre.h pcre_config.h pcre_internal.h pcre_tables.c pcre_ucd.c
+rm -f Foundation/src/pcre_byte_order.c
 rm -f Foundation/src/pcre_chartables.c
 rm -f Foundation/src/pcre_compile.c
+rm -f Foundation/src/pcre_config.c
+rm -f Foundation/src/pcre_dfa_exec.c
 rm -f Foundation/src/pcre_exec.c
 rm -f Foundation/src/pcre_fullinfo.c
+rm -f Foundation/src/pcre_get.c
 rm -f Foundation/src/pcre_globals.c
+rm -f Foundation/src/pcre_jit_compile.c
 rm -f Foundation/src/pcre_maketables.c
 rm -f Foundation/src/pcre_newline.c
 rm -f Foundation/src/pcre_ord2utf8.c
+rm -f Foundation/src/pcre_refcount.c
+rm -f Foundation/src/pcre_string_utils.c
 rm -f Foundation/src/pcre_study.c
 rm -f Foundation/src/pcre_try_flipped.c
 rm -f Foundation/src/pcre_valid_utf8.c
+rm -f Foundation/src/pcre_version.c
 rm -f Foundation/src/pcre_xclass.c
 rm -f Data/SQLite/src/sqlite3.h
 rm -f Data/SQLite/src/sqlite3.c
@@ -122,6 +141,20 @@ make %{?_smp_mflags} STRIP=/bin/true
 make install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
 
+%check
+%if %{with tests}
+LIBPATH="$(pwd)/lib/Linux/$(uname -m)"
+POCO_BASE="$(pwd)"
+for COMPONENT in $(cat components); do
+    TESTPATH="$COMPONENT/testsuite/bin/Linux/$(uname -m)"
+    if [ -x "$TESTPATH/testrunner" ]; then
+	pushd "$TESTPATH"
+	LD_LIBRARY_PATH="$LIBPATH:." POCO_BASE="$POCO_BASE" ./testrunner -all
+	popd
+    fi
+done
+%endif
+
 %package          foundation
 Summary:          The Foundation POCO component
 Group:            System Environment/Libraries
@@ -135,7 +168,6 @@ of C++ class libraries for network-centric applications.)
 %postun foundation -p /sbin/ldconfig
 
 %files foundation
-%defattr(-, root, root, -)
 %{_libdir}/libPocoFoundation.so.*
 
 %package          xml
@@ -151,7 +183,6 @@ class libraries for network-centric applications.)
 %postun xml -p /sbin/ldconfig
 
 %files xml
-%defattr(-, root, root, -)
 %{_libdir}/libPocoXML.so.*
 
 %package          util
@@ -167,7 +198,6 @@ class libraries for network-centric applications.)
 %postun util -p /sbin/ldconfig
 
 %files util
-%defattr(-, root, root, -)
 %{_libdir}/libPocoUtil.so.*
 
 %package          net
@@ -183,7 +213,6 @@ class libraries for network-centric applications.)
 %postun net -p /sbin/ldconfig
 
 %files net
-%defattr(-, root, root, -)
 %{_libdir}/libPocoNet.so.*
 
 %package          crypto
@@ -199,7 +228,6 @@ C++ class libraries for network-centric applications.)
 %postun crypto -p /sbin/ldconfig
 
 %files crypto
-%defattr(-, root, root, -)
 %{_libdir}/libPocoCrypto.so.*
 
 %package          netssl
@@ -215,7 +243,6 @@ C++ class libraries for network-centric applications.)
 %postun netssl -p /sbin/ldconfig
 
 %files netssl
-%defattr(-, root, root, -)
 %{_libdir}/libPocoNetSSL.so.*
 
 %package          data
@@ -231,7 +258,6 @@ C++ class libraries for network-centric applications.)
 %postun data -p /sbin/ldconfig
 
 %files data
-%defattr(-, root, root, -)
 %{_libdir}/libPocoData.so.*
 
 %package          sqlite
@@ -247,7 +273,6 @@ of C++ class libraries for network-centric applications.)
 %postun sqlite -p /sbin/ldconfig
 
 %files sqlite
-%defattr(-, root, root, -)
 %{_libdir}/libPocoDataSQLite.so.*
 
 %package          odbc
@@ -263,7 +288,6 @@ of C++ class libraries for network-centric applications.)
 %postun odbc -p /sbin/ldconfig
 
 %files odbc
-%defattr(-, root, root, -)
 %{_libdir}/libPocoDataODBC.so.*
 
 %package          mysql
@@ -279,7 +303,6 @@ of C++ class libraries for network-centric applications.)
 %postun mysql -p /sbin/ldconfig
 
 %files mysql
-%defattr(-, root, root, -)
 %{_libdir}/libPocoDataMySQL.so.*
 
 %package          zip
@@ -295,8 +318,37 @@ class libraries for network-centric applications.)
 %postun zip -p /sbin/ldconfig
 
 %files zip
-%defattr(-, root, root, -)
 %{_libdir}/libPocoZip.so.*
+
+%package          json
+Summary:          The JSON POCO component
+Group:            System Environment/Libraries
+
+%description json
+This package contains the JSON component of POCO. (POCO is a set of C++
+class libraries for network-centric applications.)
+
+%post json -p /sbin/ldconfig
+
+%postun json -p /sbin/ldconfig
+
+%files json
+%{_libdir}/libPocoJSON.so.*
+
+%package          mongodb
+Summary:          The MongoDB POCO component
+Group:            System Environment/Libraries
+
+%description mongodb
+This package contains the MongoDB component of POCO. (POCO is a set of C++
+class libraries for network-centric applications.)
+
+%post mongodb -p /sbin/ldconfig
+
+%postun mongodb -p /sbin/ldconfig
+
+%files mongodb
+%{_libdir}/libPocoMongoDB.so.*
 
 %package          pagecompiler
 Summary:          The PageCompiler POCO component
@@ -307,7 +359,6 @@ This package contains the PageCompiler component of POCO. (POCO is a
 set of C++ class libraries for network-centric applications.)
 
 %files pagecompiler
-%defattr(-, root, root, -)
 %{_bindir}/cpspc
 %{_bindir}/f2cpsp
 
@@ -324,7 +375,6 @@ application testing purposes.
 %postun debug -p /sbin/ldconfig
 
 %files debug
-%defattr(-, root, root, -)
 %{_libdir}/libPocoFoundationd.so.*
 %{_libdir}/libPocoXMLd.so.*
 %{_libdir}/libPocoUtild.so.*
@@ -336,6 +386,8 @@ application testing purposes.
 %{_libdir}/libPocoDataODBCd.so.*
 %{_libdir}/libPocoDataMySQLd.so.*
 %{_libdir}/libPocoZipd.so.*
+%{_libdir}/libPocoJSONd.so.*
+%{_libdir}/libPocoMongoDBd.so.*
 %{_bindir}/cpspcd
 %{_bindir}/f2cpspd
 
@@ -343,19 +395,21 @@ application testing purposes.
 Summary:          Headers for developing programs that will use POCO
 Group:            Development/Libraries
 
-Requires:         poco-debug = %{version}-%{release}
-Requires:         poco-foundation = %{version}-%{release}
-Requires:         poco-xml = %{version}-%{release}
-Requires:         poco-util = %{version}-%{release}
-Requires:         poco-net = %{version}-%{release}
-Requires:         poco-crypto = %{version}-%{release}
-Requires:         poco-netssl = %{version}-%{release}
-Requires:         poco-data = %{version}-%{release}
-Requires:         poco-sqlite = %{version}-%{release}
-Requires:         poco-odbc = %{version}-%{release}
-Requires:         poco-mysql = %{version}-%{release}
-Requires:         poco-zip = %{version}-%{release}
-Requires:         poco-pagecompiler = %{version}-%{release}
+Requires:         poco-debug%{?_isa} = %{version}-%{release}
+Requires:         poco-foundation%{?_isa} = %{version}-%{release}
+Requires:         poco-xml%{?_isa} = %{version}-%{release}
+Requires:         poco-util%{?_isa} = %{version}-%{release}
+Requires:         poco-net%{?_isa} = %{version}-%{release}
+Requires:         poco-crypto%{?_isa} = %{version}-%{release}
+Requires:         poco-netssl%{?_isa} = %{version}-%{release}
+Requires:         poco-data%{?_isa} = %{version}-%{release}
+Requires:         poco-sqlite%{?_isa} = %{version}-%{release}
+Requires:         poco-odbc%{?_isa} = %{version}-%{release}
+Requires:         poco-mysql%{?_isa} = %{version}-%{release}
+Requires:         poco-zip%{?_isa} = %{version}-%{release}
+Requires:         poco-json%{?_isa} = %{version}-%{release}
+Requires:         poco-mongodb%{?_isa} = %{version}-%{release}
+Requires:         poco-pagecompiler%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
 Requires:         expat-devel
@@ -371,8 +425,6 @@ This package contains the header files needed for developing
 POCO applications.
 
 %files devel
-%defattr(-, root, root, -)
-%doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 %{_includedir}/Poco
 %{_libdir}/libPocoFoundation.so
 %{_libdir}/libPocoFoundationd.so
@@ -396,6 +448,10 @@ POCO applications.
 %{_libdir}/libPocoDataMySQLd.so
 %{_libdir}/libPocoZip.so
 %{_libdir}/libPocoZipd.so
+%{_libdir}/libPocoJSON.so
+%{_libdir}/libPocoJSONd.so
+%{_libdir}/libPocoMongoDB.so
+%{_libdir}/libPocoMongoDBd.so
 
 %package          doc
 Summary:          The POCO API reference documentation
@@ -412,10 +468,18 @@ This is the complete POCO class library reference documentation in
 HTML format.
 
 %files doc
-%defattr(-, root, root, -)
-%doc poco-%{poco_doc_version}-all-doc/*
+%doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Sat Jan 30 2016 Scott Talbert <swt@techie.net> - 1.6.1-1
+- New upstream release 1.6.1 (#917362)
+- Removed AArch64 patch as it has been incorporated upstream
+- Removed superfluous %%defattrs
+- Add patches to fix partial PCRE unbundling issues
+- Add patch to fix sample linking issues with JSON library
+- Enable running of tests in %%check
+- Add JSON and MongoDB subpackages
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 

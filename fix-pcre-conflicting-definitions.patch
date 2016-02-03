@@ -1,0 +1,21 @@
+diff -up poco-1.6.1-all/Foundation/include/Poco/RegularExpression.h.pcrefix poco-1.6.1-all/Foundation/include/Poco/RegularExpression.h
+--- poco-1.6.1-all/Foundation/include/Poco/RegularExpression.h.pcrefix	2015-08-04 01:20:55.000000000 -0400
++++ poco-1.6.1-all/Foundation/include/Poco/RegularExpression.h	2016-01-29 23:29:45.618056950 -0500
+@@ -27,6 +27,9 @@
+ #include <vector>
+ 
+ 
++#ifdef POCO_UNBUNDLED
++#include <pcre.h>
++#else
+ //
+ // Copy these definitions from pcre.h
+ // to avoid pulling in the entire header file
+@@ -37,6 +40,7 @@ extern "C"
+ 	typedef struct real_pcre8_or_16 pcre;
+ 	struct pcre_extra;
+ }
++#endif
+ 
+ 
+ namespace Poco {
