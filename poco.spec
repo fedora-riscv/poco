@@ -1,7 +1,6 @@
 
 %global poco_src_version 1.4.2p1
 %global poco_doc_version 1.4.2p1
-%global poco_rpm_release 2
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -13,7 +12,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}.10
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -24,6 +23,7 @@ Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.
 Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
 # upstream commit 37899ed, shipped in 1.5.2-rc2
 Patch0:           poco-aarch64.patch
+Patch1:           CVE-2014-0350.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -43,6 +43,7 @@ including the standard library.
 %prep
 %setup -q -n poco-%{version}-all -a1
 %patch0 -p1
+%patch1 -p1
 /bin/chmod -R a-x+X poco-%{poco_doc_version}-all-doc
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -416,6 +417,9 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Tue Feb 09 2016 Scott Talbert <swt@techie.net> - 1.4.2p1-3
+- Apply patch for CVE-2014-0350 (#1091814)
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
