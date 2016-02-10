@@ -1,7 +1,7 @@
 
 Name:             poco
 Version:          1.3.5
-Release:          9%{?dist}
+Release:          10%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -15,6 +15,7 @@ Source1:          http://downloads.sourceforge.net/poco/poco-%{version}-doc.tar.
 # bundled versions of the system libraries from the build process.
 Patch0:           poco-1.3.5-syslibs.patch
 Patch1:           poco-1.3.5-RH-old-SQLite.patch
+Patch2:           70_fix_CVE-2014-0350.dpatch
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -90,6 +91,7 @@ rm -f XML/src/xmltok_ns.c
 
 # Make it working with old sqlite
 %patch1 -p1 -b .old-sqlite
+%patch2 -p1 -b .CVE-2014-0350
 
 %build
 %configure --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
@@ -379,6 +381,9 @@ HTML format.
 %doc poco-%{version}-doc/*
 
 %changelog
+* Wed Feb 10 2016 Scott Talbert <swt@techie.net> - 1.3.5-10
+- Applied patch from Debian for CVE-2014-0350 (#1091814)
+
 * Mon Jan 24 2011 Matěj Cepl <mcepl@redhat.com> - 1.3.5-9
 - Add expat-devel as a dependency of poco-devel (#669708)
 
