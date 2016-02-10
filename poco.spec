@@ -1,6 +1,5 @@
 %global poco_src_version 1.4.2p1
 %global poco_doc_version 1.4.2p1
-%global poco_rpm_release 2
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -12,7 +11,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -21,6 +20,9 @@ URL:              http://www.pocoproject.org
 
 Source0:          http://downloads.sourceforge.net/poco/poco-%{version}-all.tar.bz2
 Source1:          http://downloads.sourceforge.net/poco/poco-%{poco_doc_version}-all-doc.tar.gz
+# upstream commit 37899ed, shipped in 1.5.2-rc2
+Patch0:           poco-aarch64.patch
+Patch1:           CVE-2014-0350.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -39,6 +41,8 @@ including the standard library.
 
 %prep
 %setup -q -n poco-%{version}-all -a1
+%patch0 -p1
+%patch1 -p1
 /bin/chmod -R a-x+X poco-%{poco_doc_version}-all-doc
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -412,6 +416,39 @@ HTML format.
 %doc poco-%{poco_doc_version}-all-doc/*
 
 %changelog
+* Tue Feb 09 2016 Scott Talbert <swt@techie.net> - 1.4.2p1-3
+- Apply patch for CVE-2014-0350 (#1091814)
+
+* Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1.4.2p1-2.9
+- Rebuilt for GCC 5 C++11 ABI change
+
+* Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Tue Jul 08 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 1.4.2p1-2.7
+- Add support for AArch64
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Feb 10 2012 Petr Pisar <ppisar@redhat.com> - 1.4.2p1-2.2
+- Rebuild against PCRE 8.30
+
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Sun Dec 18 2011 Dan Horák <dan@danny.cz> - 1.4.p1-2
 - build without tests on s390
 
