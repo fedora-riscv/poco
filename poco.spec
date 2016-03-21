@@ -7,8 +7,8 @@
 %bcond_without samples
 
 Name:             poco
-Version:          1.6.1
-Release:          2%{?dist}
+Version:          1.7.1
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -17,18 +17,14 @@ URL:              http://pocoproject.org
 
 Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
 
-# Adapted from upstream commit 94bb16f
-Patch0:           fix-pcre-conflicting-definitions.patch
-# From buildroot project, see patch
-Patch1:           fix-unbundled-pcre-usage.patch
 # Some of the samples need to link with the JSON library
-Patch2:           samples-link-json.patch
+Patch0:           samples-link-json.patch
 # Disable the tests that will fail under Koji (mostly network)
-Patch3:           disable-tests.patch
+Patch1:           disable-tests.patch
 # Older versions of SQLite don't have SQLITE_BUSY_SNAPSHOT so ifdef it out
-Patch4:           sqlite-no-busy-snapshot.patch
+Patch2:           sqlite-no-busy-snapshot.patch
 # Support PPC64LE
-Patch5:           ppc64le.patch
+Patch3:           ppc64le.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -57,8 +53,6 @@ including the standard library.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
@@ -140,7 +134,7 @@ rm -f XML/src/xmltok_ns.c
 %if %{without samples}
   %global poco_samples --no-samples
 %endif
-./configure --prefix=%{_prefix} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
+./configure --prefix=%{_prefix} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql --everything
 make %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -477,6 +471,10 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Sun Mar 20 2016 Scott Talbert <swt@techie.net> - 1.7.1-1
+- New upstream release 1.7.1
+- Remove patches that have been incorporated upstream
+
 * Thu Feb 04 2016 Scott Talbert <swt@techie.net> - 1.6.1-2
 - Add patch for SQLite on EL7
 - Add patch for PPC64LE
