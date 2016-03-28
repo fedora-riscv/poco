@@ -7,7 +7,7 @@
 %bcond_without samples
 
 Name:             poco
-Version:          1.7.1
+Version:          1.7.2
 Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
@@ -471,6 +471,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Mon Mar 28 2016 Scott Talbert <swt@techie.net> - 1.7.2-1
+- New upstream release 1.7.2
+
 * Sun Mar 20 2016 Scott Talbert <swt@techie.net> - 1.7.1-1
 - New upstream release 1.7.1
 - Remove patches that have been incorporated upstream
