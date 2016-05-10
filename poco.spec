@@ -7,7 +7,7 @@
 %bcond_without samples
 
 Name:             poco
-Version:          1.7.2
+Version:          1.7.3
 Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
@@ -33,6 +33,7 @@ BuildRequires:    zlib-devel
 BuildRequires:    pcre-devel
 BuildRequires:    sqlite-devel
 BuildRequires:    expat-devel
+BuildRequires:    mongodb-devel
 BuildRequires:    libtool-ltdl-devel
 
 # We build poco to unbundle as much as possible, but unfortunately, it uses
@@ -135,7 +136,7 @@ rm -f XML/src/xmltok_ns.c
   %global poco_samples --no-samples
 %endif
 ./configure --prefix=%{_prefix} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql --everything
-make %{?_smp_mflags} STRIP=/bin/true
+make -s %{?_smp_mflags} STRIP=/bin/true
 
 %install
 make install DESTDIR=%{buildroot}
@@ -471,6 +472,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue, 10 May 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
+- New upstream release 1.7.3
+
 * Mon Mar 28 2016 Scott Talbert <swt@techie.net> - 1.7.2-1
 - New upstream release 1.7.2
 
