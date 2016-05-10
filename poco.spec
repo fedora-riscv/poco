@@ -156,6 +156,7 @@ for COMPONENT in $(cat components); do
 done
 %endif
 
+# -----------------------------------------------------------------------------
 %package          foundation
 Summary:          The Foundation POCO component
 Group:            System Environment/Libraries
@@ -163,14 +164,13 @@ Group:            System Environment/Libraries
 %description foundation
 This package contains the Foundation component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
-
 %post foundation -p /sbin/ldconfig
-
 %postun foundation -p /sbin/ldconfig
-
 %files foundation
 %{_libdir}/libPocoFoundation.so.*
 
+
+# -----------------------------------------------------------------------------
 %package          xml
 Summary:          The XML POCO component
 Group:            System Environment/Libraries
@@ -178,14 +178,12 @@ Group:            System Environment/Libraries
 %description xml
 This package contains the XML component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
-
 %post xml -p /sbin/ldconfig
-
 %postun xml -p /sbin/ldconfig
-
 %files xml
 %{_libdir}/libPocoXML.so.*
 
+# -----------------------------------------------------------------------------
 %package          util
 Summary:          The Util POCO component
 Group:            System Environment/Libraries
@@ -193,14 +191,12 @@ Group:            System Environment/Libraries
 %description util
 This package contains the Util component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
-
 %post util -p /sbin/ldconfig
-
 %postun util -p /sbin/ldconfig
-
 %files util
 %{_libdir}/libPocoUtil.so.*
 
+# -----------------------------------------------------------------------------
 %package          net
 Summary:          The Net POCO component
 Group:            System Environment/Libraries
@@ -208,29 +204,24 @@ Group:            System Environment/Libraries
 %description net
 This package contains the Net component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
-
 %post net -p /sbin/ldconfig
-
 %postun net -p /sbin/ldconfig
-
 %files net
 %{_libdir}/libPocoNet.so.*
 
+# -----------------------------------------------------------------------------
 %package          crypto
 Summary:          The Crypto POCO component
 Group:            System Environment/Libraries
-
 %description crypto
 This package contains the Crypto component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
-
 %post crypto -p /sbin/ldconfig
-
 %postun crypto -p /sbin/ldconfig
-
 %files crypto
 %{_libdir}/libPocoCrypto.so.*
 
+# -----------------------------------------------------------------------------
 %package          netssl
 Summary:          The NetSSL POCO component
 Group:            System Environment/Libraries
@@ -238,14 +229,12 @@ Group:            System Environment/Libraries
 %description netssl
 This package contains the NetSSL component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
-
 %post netssl -p /sbin/ldconfig
-
 %postun netssl -p /sbin/ldconfig
-
 %files netssl
 %{_libdir}/libPocoNetSSL.so.*
 
+# -----------------------------------------------------------------------------
 %package          data
 Summary:          The Data POCO component
 Group:            System Environment/Libraries
@@ -253,14 +242,12 @@ Group:            System Environment/Libraries
 %description data
 This package contains the Data component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
-
 %post data -p /sbin/ldconfig
-
 %postun data -p /sbin/ldconfig
-
 %files data
 %{_libdir}/libPocoData.so.*
 
+# -----------------------------------------------------------------------------
 %package          sqlite
 Summary:          The Data/SQLite POCO component
 Group:            System Environment/Libraries
@@ -268,14 +255,12 @@ Group:            System Environment/Libraries
 %description sqlite
 This package contains the Data/SQLite component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
-
 %post sqlite -p /sbin/ldconfig
-
 %postun sqlite -p /sbin/ldconfig
-
 %files sqlite
 %{_libdir}/libPocoDataSQLite.so.*
 
+# -----------------------------------------------------------------------------
 %package          odbc
 Summary:          The Data/ODBC POCO component
 Group:            System Environment/Libraries
@@ -283,14 +268,12 @@ Group:            System Environment/Libraries
 %description odbc
 This package contains the Data/ODBC component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
-
 %post odbc -p /sbin/ldconfig
-
 %postun odbc -p /sbin/ldconfig
-
 %files odbc
 %{_libdir}/libPocoDataODBC.so.*
 
+# -----------------------------------------------------------------------------
 %package          mysql
 Summary:          The Data/MySQL POCO component
 Group:            System Environment/Libraries
@@ -298,14 +281,12 @@ Group:            System Environment/Libraries
 %description mysql
 This package contains the Data/MySQL component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
-
 %post mysql -p /sbin/ldconfig
-
 %postun mysql -p /sbin/ldconfig
-
 %files mysql
 %{_libdir}/libPocoDataMySQL.so.*
 
+# -----------------------------------------------------------------------------
 %package          zip
 Summary:          The Zip POCO component
 Group:            System Environment/Libraries
@@ -313,14 +294,12 @@ Group:            System Environment/Libraries
 %description zip
 This package contains the Zip component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
-
 %post zip -p /sbin/ldconfig
-
 %postun zip -p /sbin/ldconfig
-
 %files zip
 %{_libdir}/libPocoZip.so.*
 
+# -----------------------------------------------------------------------------
 %package          json
 Summary:          The JSON POCO component
 Group:            System Environment/Libraries
@@ -328,14 +307,12 @@ Group:            System Environment/Libraries
 %description json
 This package contains the JSON component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
-
 %post json -p /sbin/ldconfig
-
 %postun json -p /sbin/ldconfig
-
 %files json
 %{_libdir}/libPocoJSON.so.*
 
+# -----------------------------------------------------------------------------
 %package          mongodb
 Summary:          The MongoDB POCO component
 Group:            System Environment/Libraries
@@ -343,14 +320,12 @@ Group:            System Environment/Libraries
 %description mongodb
 This package contains the MongoDB component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
-
 %post mongodb -p /sbin/ldconfig
-
 %postun mongodb -p /sbin/ldconfig
-
 %files mongodb
 %{_libdir}/libPocoMongoDB.so.*
 
+# -----------------------------------------------------------------------------
 %package          pagecompiler
 Summary:          The PageCompiler POCO component
 Group:            System Environment/Libraries
@@ -358,11 +333,11 @@ Group:            System Environment/Libraries
 %description pagecompiler
 This package contains the PageCompiler component of POCO. (POCO is a 
 set of C++ class libraries for network-centric applications.)
-
 %files pagecompiler
 %{_bindir}/cpspc
 %{_bindir}/f2cpsp
 
+# -----------------------------------------------------------------------------
 %package          debug
 Summary:          Debug builds of the POCO libraries
 Group:            Development/Libraries
@@ -370,11 +345,8 @@ Group:            Development/Libraries
 %description debug
 This package contains the debug builds of the POCO libraries for 
 application testing purposes.
-
 %post debug -p /sbin/ldconfig
-
 %postun debug -p /sbin/ldconfig
-
 %files debug
 %{_libdir}/libPocoFoundationd.so.*
 %{_libdir}/libPocoXMLd.so.*
@@ -392,6 +364,7 @@ application testing purposes.
 %{_bindir}/cpspcd
 %{_bindir}/f2cpspd
 
+# -----------------------------------------------------------------------------
 %package          devel
 Summary:          Headers for developing programs that will use POCO
 Group:            Development/Libraries
@@ -454,6 +427,7 @@ POCO applications.
 %{_libdir}/libPocoMongoDB.so
 %{_libdir}/libPocoMongoDBd.so
 
+# -----------------------------------------------------------------------------
 %package          doc
 Summary:          The POCO API reference documentation
 Group:            Documentation
