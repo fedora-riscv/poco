@@ -1,3 +1,10 @@
+%global poco_src_version 1.7.3
+%global poco_doc_version 1.7.3
+%global poco_rpm_release 1
+%global commit0 abc4742ebe6718530a2503fcc3f2554a6296ef5a
+%global gittag0 poco-1.7.3-release
+%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
 %bcond_without tests
@@ -7,15 +14,16 @@
 %bcond_without samples
 
 Name:             poco
-Version:          1.7.3
-Release:          1%{?dist}
+Version:          %{poco_src_version}
+Release:          %{poco_rpm_release}%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
 License:          Boost
 URL:              http://pocoproject.org
 
-Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
+#Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
+Source0:	  https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Some of the samples need to link with the JSON library
 Patch0:           samples-link-json.patch
@@ -49,7 +57,8 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-%setup -q -n poco-%{version}-all
+#%setup -q -n poco-%{version}-all
+%setup -qn %{name}-%{gittag0}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -446,7 +455,7 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
-* Tue, 10 May 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
+* Sat May 14 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
 - New upstream release 1.7.3
 
 * Mon Mar 28 2016 Scott Talbert <swt@techie.net> - 1.7.2-1
