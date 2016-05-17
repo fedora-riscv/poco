@@ -23,7 +23,7 @@ License:          Boost
 URL:              http://pocoproject.org
 
 #Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
-Source0:	  https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:          https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Some of the samples need to link with the JSON library
 Patch0:           samples-link-json.patch
