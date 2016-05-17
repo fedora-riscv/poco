@@ -144,7 +144,7 @@ rm -f XML/src/xmltok_ns.c
 %if %{without samples}
   %global poco_samples --no-samples
 %endif
-./configure --prefix=%{_prefix} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql --everything
+./configure --prefix=%{_prefix} --everything --omit=PDF,CppParser --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
 make -s %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -154,15 +154,9 @@ rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
 %check
 %if %{with tests}
 LIBPATH="$(pwd)/lib/Linux/$(uname -m)"
+export LD_LIBRARY_PATH=$LIBPATH
 POCO_BASE="$(pwd)"
-for COMPONENT in $(cat components); do
-    TESTPATH="$COMPONENT/testsuite/bin/Linux/$(uname -m)"
-    if [ -x "$TESTPATH/testrunner" ]; then
-	pushd "$TESTPATH"
-	LD_LIBRARY_PATH="$LIBPATH:." POCO_BASE="$POCO_BASE" ./testrunner -all
-	popd
-    fi
-done
+$POCO_BASE/travis/runtests.sh
 %endif
 
 # -----------------------------------------------------------------------------
@@ -222,6 +216,7 @@ class libraries for network-centric applications.)
 %package          crypto
 Summary:          The Crypto POCO component
 Group:            System Environment/Libraries
+
 %description crypto
 This package contains the Crypto component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
