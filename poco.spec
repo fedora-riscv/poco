@@ -22,7 +22,6 @@ Group:            Development/Libraries
 License:          Boost
 URL:              http://pocoproject.org
 
-#Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
 Source0:          https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Some of the samples need to link with the JSON library
@@ -57,7 +56,6 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-#%setup -q -n poco-%{version}-all
 %setup -qn %{name}-%{gittag0}
 %patch0 -p1
 %patch1 -p1
