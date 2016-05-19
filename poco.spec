@@ -1,9 +1,5 @@
 %global poco_src_version 1.7.3
-%global poco_doc_version 1.7.3
-%global poco_rpm_release 1
-%global commit0 abc4742ebe6718530a2503fcc3f2554a6296ef5a
 %global gittag0 poco-1.7.3-release
-%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -15,7 +11,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          %{poco_rpm_release}%{?dist}
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
