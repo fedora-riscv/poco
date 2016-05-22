@@ -1,3 +1,6 @@
+%global poco_src_version 1.7.3
+%global gittag0 poco-1.7.3-release
+
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
 %bcond_without tests
@@ -7,14 +10,15 @@
 %bcond_without samples
 
 Name:             poco
-Version:          1.7.3
+Version:          %{poco_src_version}
 Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
 License:          Boost
 URL:              http://pocoproject.org
-Source0:          http://pocoproject.org/releases/poco-%{version}/poco-%{version}-all.tar.gz
+Source0:          https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
+
 # Some of the samples need to link with the JSON library
 Patch0:           samples-link-json.patch
 # Disable the tests that will fail under Koji (mostly network)
@@ -47,7 +51,7 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-%setup -q -n poco-%{version}-all
+%setup -qn %{name}-%{gittag0}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -133,7 +137,7 @@ rm -f XML/src/xmltok_ns.c
 %if %{without samples}
   %global poco_samples --no-samples
 %endif
-./configure --prefix=%{_prefix} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql --everything
+./configure --prefix=%{_prefix} --everything --omit=PDF,CppParser --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
 make -s %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -143,15 +147,9 @@ rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
 %check
 %if %{with tests}
 LIBPATH="$(pwd)/lib/Linux/$(uname -m)"
+export LD_LIBRARY_PATH=$LIBPATH
 POCO_BASE="$(pwd)"
-for COMPONENT in $(cat components); do
-    TESTPATH="$COMPONENT/testsuite/bin/Linux/$(uname -m)"
-    if [ -x "$TESTPATH/testrunner" ]; then
-	pushd "$TESTPATH"
-	LD_LIBRARY_PATH="$LIBPATH:." POCO_BASE="$POCO_BASE" ./testrunner -all
-	popd
-    fi
-done
+$POCO_BASE/travis/runtests.sh
 %endif
 
 # -----------------------------------------------------------------------------
@@ -211,6 +209,7 @@ class libraries for network-centric applications.)
 %package          crypto
 Summary:          The Crypto POCO component
 Group:            System Environment/Libraries
+
 %description crypto
 This package contains the Crypto component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
@@ -444,7 +443,7 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
-* Tue, 10 May 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
+* Sat May 14 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
 - New upstream release 1.7.3
 
 * Mon Mar 28 2016 Scott Talbert <swt@techie.net> - 1.7.2-1
