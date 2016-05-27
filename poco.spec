@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          3%{?dist}
+Release:          4%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -465,6 +465,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Fri May 27 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
+- Restore removal of bundled sources
+
 * Thu May 26 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
 - Exclude Data/SQLite from testing.
 
