@@ -63,12 +63,81 @@ including the standard library.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
 /bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
-/bin/sed -i.orig -e 's|PDF|Data/SQLite PDF|g' travis/runtests.sh
+/bin/sed -i.orig -e 's|PDF|Data/SQLite PDF|' travis/runtests.sh
+
+rm -f Foundation/src/MSG00001.bin
+rm -f Foundation/include/Poco/zconf.h
+rm -f Foundation/include/Poco/zlib.h
+rm -f Foundation/src/adler32.c
+rm -f Foundation/src/compress.c
+rm -f Foundation/src/crc32.c
+rm -f Foundation/src/crc32.h
+rm -f Foundation/src/deflate.c
+rm -f Foundation/src/deflate.h
+rm -f Foundation/src/gzguts.h
+rm -f Foundation/src/gzio.c
+rm -f Foundation/src/infback.c
+rm -f Foundation/src/inffast.c
+rm -f Foundation/src/inffast.h
+rm -f Foundation/src/inffixed.h
+rm -f Foundation/src/inflate.c
+rm -f Foundation/src/inflate.h
+rm -f Foundation/src/inftrees.c
+rm -f Foundation/src/inftrees.h
+rm -f Foundation/src/trees.c
+rm -f Foundation/src/trees.h
+rm -f Foundation/src/zconf.h
+rm -f Foundation/src/zlib.h
+rm -f Foundation/src/zutil.c
+rm -f Foundation/src/zutil.h
+# PCRE files that can't be removed due to still being bundled:
+#   pcre.h pcre_config.h pcre_internal.h pcre_tables.c pcre_ucd.c
+rm -f Foundation/src/pcre_byte_order.c
+rm -f Foundation/src/pcre_chartables.c
+rm -f Foundation/src/pcre_compile.c
+rm -f Foundation/src/pcre_config.c
+rm -f Foundation/src/pcre_dfa_exec.c
+rm -f Foundation/src/pcre_exec.c
+rm -f Foundation/src/pcre_fullinfo.c
+rm -f Foundation/src/pcre_get.c
+rm -f Foundation/src/pcre_globals.c
+rm -f Foundation/src/pcre_jit_compile.c
+rm -f Foundation/src/pcre_maketables.c
+rm -f Foundation/src/pcre_newline.c
+rm -f Foundation/src/pcre_ord2utf8.c
+rm -f Foundation/src/pcre_refcount.c
+rm -f Foundation/src/pcre_string_utils.c
+rm -f Foundation/src/pcre_study.c
+rm -f Foundation/src/pcre_try_flipped.c
+rm -f Foundation/src/pcre_valid_utf8.c
+rm -f Foundation/src/pcre_version.c
+rm -f Foundation/src/pcre_xclass.c
+rm -f Data/SQLite/src/sqlite3.h
+rm -f Data/SQLite/src/sqlite3.c
+rm -f XML/include/Poco/XML/expat.h
+rm -f XML/include/Poco/XML/expat_external.h
+rm -f XML/src/ascii.h
+rm -f XML/src/asciitab.h
+rm -f XML/src/expat_config.h
+rm -f XML/src/iasciitab.h
+rm -f XML/src/internal.h
+rm -f XML/src/latin1tab.h
+rm -f XML/src/nametab.h
+rm -f XML/src/utf8tab.h
+rm -f XML/src/xmlparse.cpp
+rm -f XML/src/xmlrole.c
+rm -f XML/src/xmlrole.h
+rm -f XML/src/xmltok.c
+rm -f XML/src/xmltok.h
+rm -f XML/src/xmltok_impl.c
+rm -f XML/src/xmltok_impl.h
+rm -f XML/src/xmltok_ns.c
 
 %build
 %if %{without tests}
