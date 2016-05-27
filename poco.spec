@@ -4,14 +4,18 @@
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
 %bcond_without tests
-%else
-%bcond_with tests
 %endif
+
 %bcond_without samples
+
+# mongodb still available only on little endian arches
+%ifarch aarch64 %{arm} %{ix86} x86_64 ppc64le
+%bcond_without mongodb
+%endif
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          1%{?dist}
+Release:          4%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -36,7 +40,9 @@ BuildRequires:    zlib-devel
 BuildRequires:    pcre-devel
 BuildRequires:    sqlite-devel
 BuildRequires:    expat-devel
+%if %{with mongodb}
 BuildRequires:    mongodb-devel
+%endif
 BuildRequires:    libtool-ltdl-devel
 
 # We build poco to unbundle as much as possible, but unfortunately, it uses
@@ -57,12 +63,14 @@ including the standard library.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
-/bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
 /bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
+/bin/sed -i.orig -e 's|PDF|Data/SQLite PDF|' travis/runtests.sh
+
 rm -f Foundation/src/MSG00001.bin
 rm -f Foundation/include/Poco/zconf.h
 rm -f Foundation/include/Poco/zlib.h
@@ -138,7 +146,12 @@ rm -f XML/src/xmltok_ns.c
 %if %{without samples}
   %global poco_samples --no-samples
 %endif
-./configure --prefix=%{_prefix} --everything --omit=PDF,CppParser --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
+%if %{without mongodb}
+  %global poco_omit --omit=PDF,CppParser,MongoDB
+%else
+  %global poco_omit --omit=PDF,CppParser
+%endif
+./configure --prefix=%{_prefix} --everything %{poco_omit} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
 make -s %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -311,6 +324,7 @@ class libraries for network-centric applications.)
 %{_libdir}/libPocoJSON.so.*
 
 # -----------------------------------------------------------------------------
+%if %{with mongodb}
 %package          mongodb
 Summary:          The MongoDB POCO component
 Group:            System Environment/Libraries
@@ -322,6 +336,7 @@ class libraries for network-centric applications.)
 %postun mongodb -p /sbin/ldconfig
 %files mongodb
 %{_libdir}/libPocoMongoDB.so.*
+%endif
 
 # -----------------------------------------------------------------------------
 %package          pagecompiler
@@ -358,7 +373,9 @@ application testing purposes.
 %{_libdir}/libPocoDataMySQLd.so.*
 %{_libdir}/libPocoZipd.so.*
 %{_libdir}/libPocoJSONd.so.*
+%if %{with mongodb}
 %{_libdir}/libPocoMongoDBd.so.*
+%endif
 %{_bindir}/cpspcd
 %{_bindir}/f2cpspd
 
@@ -380,7 +397,9 @@ Requires:         poco-odbc%{?_isa} = %{version}-%{release}
 Requires:         poco-mysql%{?_isa} = %{version}-%{release}
 Requires:         poco-zip%{?_isa} = %{version}-%{release}
 Requires:         poco-json%{?_isa} = %{version}-%{release}
+%if %{with mongodb}
 Requires:         poco-mongodb%{?_isa} = %{version}-%{release}
+%endif
 Requires:         poco-pagecompiler%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
@@ -422,8 +441,10 @@ POCO applications.
 %{_libdir}/libPocoZipd.so
 %{_libdir}/libPocoJSON.so
 %{_libdir}/libPocoJSONd.so
+%if %{with mongodb}
 %{_libdir}/libPocoMongoDB.so
 %{_libdir}/libPocoMongoDBd.so
+%endif
 
 # -----------------------------------------------------------------------------
 %package          doc
@@ -444,6 +465,15 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Fri May 27 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
+- Restore removal of bundled sources
+
+* Thu May 26 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
+- Exclude Data/SQLite from testing.
+
+ Wed May 25 2016 Dan Horák <dan[at]danny.cz> - 1.7.3-2
+- conditionalize mongodb support
+
 * Sat May 14 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
 - New upstream release 1.7.3
 
