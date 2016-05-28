@@ -465,7 +465,7 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
-* Fri May 27 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
+* Fri May 27 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-4
 - Restore removal of bundled sources
 
 * Thu May 26 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
