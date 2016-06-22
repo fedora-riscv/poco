@@ -70,6 +70,7 @@ including the standard library.
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
 /bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
 /bin/sed -i.orig -e 's|PDF|Data/SQLite PDF|' travis/runtests.sh
+/bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
 
 rm -f Foundation/src/MSG00001.bin
 rm -f Foundation/include/Poco/zconf.h
@@ -465,6 +466,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Wed Jun 22 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-4
+- Restore POCO_UNBUNDLED definition in Foundation/include/Poco/Config.h
+
 * Fri May 27 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
 - Restore removal of bundled sources
 
