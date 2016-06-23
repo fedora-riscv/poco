@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          4%{?dist}
+Release:          5%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -466,7 +466,7 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
-* Wed Jun 22 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-5
+* Thu Jun 23 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-5
 - Restore POCO_UNBUNDLED definition in Foundation/include/Poco/Config.h
 so that user's code compiles without having to define POCO_UNBUNDLED.
 
