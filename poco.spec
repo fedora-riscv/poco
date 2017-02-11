@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          5%{?dist}
+Release:          6%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -466,6 +466,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Thu Jun 23 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-5
 - Restore POCO_UNBUNDLED definition in Foundation/include/Poco/Config.h
 so that user's code compiles without having to define POCO_UNBUNDLED.
