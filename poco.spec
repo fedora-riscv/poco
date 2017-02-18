@@ -40,9 +40,6 @@ BuildRequires:    zlib-devel
 BuildRequires:    pcre-devel
 BuildRequires:    sqlite-devel
 BuildRequires:    expat-devel
-%if %{with mongodb}
-BuildRequires:    mongodb-devel
-%endif
 BuildRequires:    libtool-ltdl-devel
 
 # We build poco to unbundle as much as possible, but unfortunately, it uses
