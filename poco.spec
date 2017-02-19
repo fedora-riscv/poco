@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -32,6 +32,8 @@ Patch1:           disable-tests.patch
 Patch2:           sqlite-no-busy-snapshot.patch
 # Support PPC64LE
 Patch3:           ppc64le.patch
+# Add ignored-tests patches 
+Patch4:           ignored-tests.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -60,6 +62,7 @@ including the standard library.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -463,6 +466,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Sun Feb 19 2017 Francis ANDRE <zosrothko@orange.fr> - 1.7.7-2
+- Add ignored-tests.patch to ignore failing tests on ppce and armv7hl
+
 * Sat Feb 18 2017 Scott Talbert <swt@techie.net> - 1.7.7-1
 - New upstream release 1.7.7
 

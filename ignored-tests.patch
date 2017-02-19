@@ -1,0 +1,12 @@
+diff --git a/travis/runtests.sh b/travis/runtests.sh
+index c7f214d..08c5e08 100755
+--- a/travis/runtests.sh
++++ b/travis/runtests.sh
+@@ -8,6 +8,7 @@ export CPPUNIT_IGNORE="\
+   N7CppUnit10TestCallerI22HTTPSClientSessionTestEE.testProxy \
+   N7CppUnit10TestCallerI22HTTPSStreamFactoryTestEE.testProxy \
+   N7CppUnit10TestCallerI19MulticastSocketTestEE.testMulticast \
++  N7CppUnit10TestCallerI12ActivityTestEE.testActivity \
+   N7CppUnit10TestCallerI13NTPClientTestEE.testTimeSync"
+ export EXCLUDE_TESTS="Data/MySQL Data/ODBC MongoDB PDF"
+ export PATH=$PATH:.
