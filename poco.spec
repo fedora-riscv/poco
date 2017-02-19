@@ -32,7 +32,7 @@ Patch1:           disable-tests.patch
 Patch2:           sqlite-no-busy-snapshot.patch
 # Support PPC64LE
 Patch3:           ppc64le.patch
-# Support PPC64LE
+# Add failing test to travis/ignored.sh
 Patch4:           ignored-tests.patch
 
 BuildRequires:    openssl-devel
