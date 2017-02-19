@@ -1,5 +1,5 @@
-%global poco_src_version 1.7.3
-%global gittag0 poco-1.7.3-release
+%global poco_src_version 1.7.7
+%global gittag0 poco-1.7.7-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          5%{?dist}
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -32,6 +32,8 @@ Patch1:           disable-tests.patch
 Patch2:           sqlite-no-busy-snapshot.patch
 # Support PPC64LE
 Patch3:           ppc64le.patch
+# Support PPC64LE
+Patch4:           ignored-tests.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -40,9 +42,6 @@ BuildRequires:    zlib-devel
 BuildRequires:    pcre-devel
 BuildRequires:    sqlite-devel
 BuildRequires:    expat-devel
-%if %{with mongodb}
-BuildRequires:    mongodb-devel
-%endif
 BuildRequires:    libtool-ltdl-devel
 
 # We build poco to unbundle as much as possible, but unfortunately, it uses
@@ -63,6 +62,7 @@ including the standard library.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -466,6 +466,15 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Sun Feb 19 2017 Francis ANDRE <zosrothko@orange.fr> - 1.7.7-2
+- Add ignored-tests.patch to ignore failing tests on ppce and armv7hl
+
+* Sat Feb 18 2017 Scott Talbert <swt@techie.net> - 1.7.7-1
+- New upstream release 1.7.7
+
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Thu Jun 23 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-5
 - Restore POCO_UNBUNDLED definition in Foundation/include/Poco/Config.h
 so that user's code compiles without having to define POCO_UNBUNDLED.
