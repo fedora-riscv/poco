@@ -1,15 +1,15 @@
 diff -up poco-1.6.1-all/MongoDB/testsuite/src/MongoDBTest.cpp.disable_tests poco-1.6.1-all/MongoDB/testsuite/src/MongoDBTest.cpp
 --- poco-1.6.1-all/MongoDB/testsuite/src/MongoDBTest.cpp.disable_tests	2015-08-04 01:21:05.000000000 -0400
 +++ poco-1.6.1-all/MongoDB/testsuite/src/MongoDBTest.cpp	2016-02-02 20:23:12.350816303 -0500
-@@ -418,7 +418,7 @@ CppUnit::Test* MongoDBTest::suite()
+@@ -419,7 +419,7 @@ CppUnit::Test* MongoDBTest::suite()
  	CppUnit_addTest(pSuite, MongoDBTest, testCountCommand);
  	CppUnit_addTest(pSuite, MongoDBTest, testDBCountCommand);
  	CppUnit_addTest(pSuite, MongoDBTest, testDBCount2Command);
 -	CppUnit_addTest(pSuite, MongoDBTest, testConnectionPool);
 +	//CppUnit_addTest(pSuite, MongoDBTest, testConnectionPool);
  	CppUnit_addTest(pSuite, MongoDBTest, testDeleteRequest);
- 	CppUnit_addTest(pSuite, MongoDBTest, testBuildInfo);
  	CppUnit_addTest(pSuite, MongoDBTest, testCursorRequest);
+	CppUnit_addTest(pSuite, MongoDBTest, testObjectID);
 diff -up poco-1.6.1-all/NetSSL_OpenSSL/testsuite/src/HTTPSClientSessionTest.cpp.disable_tests poco-1.6.1-all/NetSSL_OpenSSL/testsuite/src/HTTPSClientSessionTest.cpp
 --- poco-1.6.1-all/NetSSL_OpenSSL/testsuite/src/HTTPSClientSessionTest.cpp.disable_tests	2015-08-04 01:21:02.000000000 -0400
 +++ poco-1.6.1-all/NetSSL_OpenSSL/testsuite/src/HTTPSClientSessionTest.cpp	2016-02-02 19:57:45.745880240 -0500
