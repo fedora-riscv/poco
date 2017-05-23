@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -398,6 +398,7 @@ Requires:         poco-pagecompiler%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
 Requires:         expat-devel
+Requires:         openssl-devel
 
 %description devel
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
@@ -459,6 +460,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue May 23 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-2
+- Add openssl-devel as a dependency of poco-devel (#1454462)
+
 * Mon May 08 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-1
 - New upstream release 1.7.8p2
 
