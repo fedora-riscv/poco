@@ -1,0 +1,22 @@
+From 076dd9679bf2e77f1df219287f0eb42ea36b7371 Mon Sep 17 00:00:00 2001
+From: Aleksandar Fabijanic <aleks-f@users.noreply.github.com>
+Date: Tue, 23 May 2017 20:36:12 -0500
+Subject: [PATCH] Build parallelization issues #1730
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 31f2d4ced..668d3e6be 100644
+--- a/Makefile
++++ b/Makefile
+@@ -243,7 +243,7 @@ Data-libexec:  Foundation-libexec
+ Data-tests: Data-libexec cppunit
+ 	$(MAKE) -C $(POCO_BASE)/Data/testsuite
+ 	
+-Data-samples: Data-libexec  Data-libexec Data/SQLite-libexec
++Data-samples: Data-libexec  Data-libexec Data/SQLite-libexec Net-libexec
+ 	$(MAKE) -C $(POCO_BASE)/Data/samples
+ 
+ Data-clean:

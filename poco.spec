@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -32,6 +32,8 @@ Patch1:           disable-tests.patch
 Patch2:           sqlite-no-busy-snapshot.patch
 # Add ignored-tests patches 
 Patch3:           ignored-tests.patch
+# Fix WebNotifier build failure due to Makefile dependency issues
+Patch4:           makefile-dependency-fix.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -460,6 +462,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu May 25 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-3
+- Add patch from upstream to resolve s390x build failures
+
 * Tue May 23 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-2
 - Add openssl-devel as a dependency of poco-devel (#1454462)
 
