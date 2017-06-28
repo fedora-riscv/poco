@@ -1,5 +1,5 @@
-%global poco_src_version 1.7.8p2
-%global gittag0 poco-1.7.8p2-release
+%global poco_src_version 1.7.8p3
+%global gittag0 poco-1.7.8p3-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          3%{?dist}
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -462,6 +462,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Wed Jun 28 2017 Scott Talbert <swt@techie.net> - 1.7.8p3-1
+- New upstream release 1.7.8p3
+
 * Thu May 25 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-3
 - Add patch from upstream to resolve s390x build failures
 
