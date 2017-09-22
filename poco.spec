@@ -13,9 +13,17 @@
 %bcond_without mongodb
 %endif
 
+%if 0%{fedora} > 27
+%global mysql_devel_pkg mariadb-connector-c-devel
+%global mysql_lib_dir %{_libdir}/mariadb
+%else
+%global mysql_devel_pkg mysql-devel
+%global mysql_lib_dir %{_libdir}/mysql
+%endif
+
 Name:             poco
 Version:          %{poco_src_version}
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -37,7 +45,7 @@ Patch4:           makefile-dependency-fix.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
-BuildRequires:    mysql-devel
+BuildRequires:    %{mysql_devel_pkg}
 BuildRequires:    zlib-devel
 BuildRequires:    pcre-devel
 BuildRequires:    sqlite-devel
@@ -147,7 +155,7 @@ rm -f XML/src/xmltok_ns.c
 %else
   %global poco_omit --omit=PDF,CppParser
 %endif
-./configure --prefix=%{_prefix} --everything %{poco_omit} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{_libdir}/mysql
+./configure --prefix=%{_prefix} --everything %{poco_omit} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{mysql_lib_dir}
 make -s %{?_smp_mflags} STRIP=/bin/true
 
 %install
@@ -462,6 +470,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Fri Sep 22 2017 Scott Talbert <swt@techie.net> - 1.7.9-2
+- Switch from mysql-devel to mariadb-connector-c-devel (#1493654)
+
 * Tue Sep 12 2017 Scott Talbert <swt@techie.net> - 1.7.9-1
 - New upstream release 1.7.9
 
