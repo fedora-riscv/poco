@@ -1,5 +1,5 @@
-%global poco_src_version 1.7.9
-%global gittag0 poco-1.7.9-release
+%global poco_src_version 1.7.9p2
+%global gittag0 poco-1.7.9p2-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          2%{?dist}
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -470,6 +470,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Wed Nov 08 2017 Scott Talbert <swt@techie.net> - 1.7.9p2-1
+- New upstream release 1.7.9p2
+
 * Fri Sep 22 2017 Scott Talbert <swt@techie.net> - 1.7.9-2
 - Switch from mysql-devel to mariadb-connector-c-devel (#1493654)
 
