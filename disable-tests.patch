@@ -84,5 +84,5 @@ diff -up poco-1.6.1-all/Net/testsuite/src/SocketsTestSuite.cpp.disable_tests poc
 -	pSuite->addTest(MulticastSocketTest::suite());
 +	//pSuite->addTest(MulticastSocketTest::suite());
  #endif
+ 	pSuite->addTest(PollSetTest::suite());
  	return pSuite;
- }

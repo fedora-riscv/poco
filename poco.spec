@@ -1,5 +1,5 @@
-%global poco_src_version 1.7.9p2
-%global gittag0 poco-1.7.9p2-release
+%global poco_src_version 1.8.0
+%global gittag0 poco-1.8.0-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -42,6 +42,8 @@ Patch2:           sqlite-no-busy-snapshot.patch
 Patch3:           ignored-tests.patch
 # Fix WebNotifier build failure due to Makefile dependency issues
 Patch4:           makefile-dependency-fix.patch
+Patch5:           xmlstreamparser-unbundled-expat.patch
+Patch6:           fix-crypto-evptest.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -151,9 +153,9 @@ rm -f XML/src/xmltok_ns.c
   %global poco_samples --no-samples
 %endif
 %if %{without mongodb}
-  %global poco_omit --omit=PDF,CppParser,MongoDB
+  %global poco_omit --omit=PDF,CppParser,Redis,MongoDB
 %else
-  %global poco_omit --omit=PDF,CppParser
+  %global poco_omit --omit=PDF,CppParser,Redis
 %endif
 ./configure --prefix=%{_prefix} --everything %{poco_omit} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{mysql_lib_dir}
 make -s %{?_smp_mflags} STRIP=/bin/true
@@ -470,6 +472,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Nov 14 2017 Scott Talbert <swt@techie.net> - 1.8.0-1
+- New upstream release 1.8.0
+
 * Wed Nov 08 2017 Scott Talbert <swt@techie.net> - 1.7.9p2-1
 - New upstream release 1.7.9p2
 
