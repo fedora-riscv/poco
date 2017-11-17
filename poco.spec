@@ -1,5 +1,5 @@
-%global poco_src_version 1.8.0
-%global gittag0 poco-1.8.0-release
+%global poco_src_version 1.8.0.1
+%global gittag0 poco-1.8.0.1-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -472,6 +472,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu Nov 16 2017 Scott Talbert <swt@techie.net> - 1.8.0.1-1
+- New upstream release 1.8.0.1
+
 * Tue Nov 14 2017 Scott Talbert <swt@techie.net> - 1.8.0-1
 - New upstream release 1.8.0
 

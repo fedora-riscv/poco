@@ -1,14 +1,14 @@
-From 0652263078c78d3914e75496922aab51e3c0749a Mon Sep 17 00:00:00 2001
+From 189cfdbb9e30210ae58509bd73f7373f475ebaad Mon Sep 17 00:00:00 2001
 From: Scott Talbert <swt@techie.net>
-Date: Tue, 14 Nov 2017 00:32:05 -0500
-Subject: [PATCH] Fix EVPTest by switching to different EC Curve
+Date: Wed, 15 Nov 2017 19:37:52 -0500
+Subject: [PATCH] Fix EVPTest by removing hard-coded EC curve name
 
 ---
  Crypto/testsuite/src/EVPTest.cpp | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Crypto/testsuite/src/EVPTest.cpp b/Crypto/testsuite/src/EVPTest.cpp
-index 4a95fedd0..0440d3fcd 100644
+index 4a95fedd0..9ae91ab1a 100644
 --- a/Crypto/testsuite/src/EVPTest.cpp
 +++ b/Crypto/testsuite/src/EVPTest.cpp
 @@ -336,7 +336,7 @@ void EVPTest::testECEVPSaveLoadStream()
@@ -16,7 +16,7 @@ index 4a95fedd0..0440d3fcd 100644
  			assert (key == key2);
  			assert (!(key != key2));
 -			ECKey ecKeyNE("secp112r2");
-+			ECKey ecKeyNE("secp256k1");
++			ECKey ecKeyNE(curveName);
  			EVPPKey keyNE(&ecKeyNE);
  			assert (key != keyNE);
  			assert (!(key == keyNE));
@@ -25,7 +25,7 @@ index 4a95fedd0..0440d3fcd 100644
  			assert (key == key2);
  			assert (!(key != key2));
 -			ECKey ecKeyNE("secp112r2");
-+			ECKey ecKeyNE("secp256k1");
++			ECKey ecKeyNE(curveName);
  			EVPPKey keyNE(&ecKeyNE);
  			assert (key != keyNE);
  			assert (!(key == keyNE));
@@ -34,10 +34,10 @@ index 4a95fedd0..0440d3fcd 100644
  			assert (key == key2);
  			assert (!(key != key2));
 -			ECKey ecKeyNE("secp112r2");
-+			ECKey ecKeyNE("secp256k1");
++			ECKey ecKeyNE(curveName);
  			EVPPKey keyNE(&ecKeyNE);
  			assert (key != keyNE);
  			assert (!(key == keyNE));
 -- 
-2.13.6
+2.14.3
 
