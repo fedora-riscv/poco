@@ -8,7 +8,7 @@
 
 Name:             poco
 Version:          1.6.1
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -29,6 +29,8 @@ Patch3:           disable-tests.patch
 Patch4:           sqlite-no-busy-snapshot.patch
 # Support PPC64LE
 Patch5:           ppc64le.patch
+# Fix CVE-2017-1000472
+Patch6:           CVE-2017-1000472.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -59,6 +61,7 @@ including the standard library.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
@@ -477,6 +480,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Jan 09 2018 Scott Talbert <swt@techie.net> - 1.6.1-3
+- Fix CVE-2017-1000472 (#1532131)
+
 * Thu Feb 04 2016 Scott Talbert <swt@techie.net> - 1.6.1-2
 - Add patch for SQLite on EL7
 - Add patch for PPC64LE
