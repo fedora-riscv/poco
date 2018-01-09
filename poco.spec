@@ -15,7 +15,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -34,6 +34,8 @@ Patch2:           sqlite-no-busy-snapshot.patch
 Patch3:           ignored-tests.patch
 # Fix WebNotifier build failure due to Makefile dependency issues
 Patch4:           makefile-dependency-fix.patch
+# Fix CVE-2017-1000472
+Patch5:           CVE-2017-1000472.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -462,6 +464,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Jan 09 2018 Scott Talbert <swt@techie.net> - 1.7.8p3-3
+- Fix CVE-2017-1000472 (#1532131)
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.8p3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
