@@ -481,7 +481,7 @@ HTML format.
 
 %changelog
 * Tue Jan 09 2018 Scott Talbert <swt@techie.net> - 1.6.1-3
-- Fix CVE-2017-1000472 (#1532131)
+- Fix CVE-2017-1000472 (#1532130)
 
 * Thu Feb 04 2016 Scott Talbert <swt@techie.net> - 1.6.1-2
 - Add patch for SQLite on EL7
