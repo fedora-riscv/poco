@@ -1,5 +1,5 @@
-%global poco_src_version 1.8.0.1
-%global gittag0 poco-1.8.0.1-release
+%global poco_src_version 1.8.1
+%global gittag0 poco-1.8.1-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -13,7 +13,7 @@
 %bcond_without mongodb
 %endif
 
-%if 0%{fedora} > 27
+%if 0%{?fedora} > 27
 %global mysql_devel_pkg mariadb-connector-c-devel
 %global mysql_lib_dir %{_libdir}/mariadb
 %else
@@ -28,22 +28,14 @@ Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
 License:          Boost
-URL:              http://pocoproject.org
+URL:              https://pocoproject.org
 
 Source0:          https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
 
-# Some of the samples need to link with the JSON library
-Patch0:           samples-link-json.patch
 # Disable the tests that will fail under Koji (mostly network)
-Patch1:           disable-tests.patch
-# Older versions of SQLite don't have SQLITE_BUSY_SNAPSHOT so ifdef it out
-Patch2:           sqlite-no-busy-snapshot.patch
+Patch0:           disable-tests.patch
 # Add ignored-tests patches 
-Patch3:           ignored-tests.patch
-# Fix WebNotifier build failure due to Makefile dependency issues
-Patch4:           makefile-dependency-fix.patch
-Patch5:           xmlstreamparser-unbundled-expat.patch
-Patch6:           fix-crypto-evptest.patch
+Patch1:           ignored-tests.patch
 
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -472,6 +464,10 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu Jan 11 2018 Scott Talbert <swt@techie.net> - 1.8.1-1
+- New upstream release 1.8.1
+- Remove patches that have been incorporated upstream
+
 * Thu Nov 16 2017 Scott Talbert <swt@techie.net> - 1.8.0.1-1
 - New upstream release 1.8.0.1
 
