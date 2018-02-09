@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -464,6 +464,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Thu Jan 11 2018 Scott Talbert <swt@techie.net> - 1.8.1-1
 - New upstream release 1.8.1
 - Remove patches that have been incorporated upstream
