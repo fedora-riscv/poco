@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -37,6 +37,7 @@ Patch0:           disable-tests.patch
 # Add ignored-tests patches 
 Patch1:           ignored-tests.patch
 
+BuildRequires:    gcc-c++
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
 BuildRequires:    %{mysql_devel_pkg}
@@ -464,6 +465,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Mon Feb 19 2018 Scott Talbert <swt@techie.net> - 1.8.1-3
+- Add missing BR for gcc-c++
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
