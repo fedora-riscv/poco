@@ -1,5 +1,5 @@
-%global poco_src_version 1.8.1
-%global gittag0 poco-1.8.1-release
+%global poco_src_version 1.9.0
+%global gittag0 poco-1.9.0-release
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          3%{?dist}
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -350,6 +350,19 @@ set of C++ class libraries for network-centric applications.)
 %{_bindir}/f2cpsp
 
 # -----------------------------------------------------------------------------
+%package          encodings
+Summary:          The Encodings POCO component
+Group:            System Environment/Libraries
+
+%description encodings
+This package contains the Encodings component of POCO. (POCO is a set of C++
+class libraries for network-centric applications.)
+%post encodings -p /sbin/ldconfig
+%postun encodings -p /sbin/ldconfig
+%files encodings
+%{_libdir}/libPocoEncodings.so.*
+
+# -----------------------------------------------------------------------------
 %package          debug
 Summary:          Debug builds of the POCO libraries
 Group:            Development/Libraries
@@ -375,6 +388,7 @@ application testing purposes.
 %if %{with mongodb}
 %{_libdir}/libPocoMongoDBd.so.*
 %endif
+%{_libdir}/libPocoEncodingsd.so.*
 %{_bindir}/cpspcd
 %{_bindir}/f2cpspd
 
@@ -400,6 +414,7 @@ Requires:         poco-json%{?_isa} = %{version}-%{release}
 Requires:         poco-mongodb%{?_isa} = %{version}-%{release}
 %endif
 Requires:         poco-pagecompiler%{?_isa} = %{version}-%{release}
+Requires:         poco-encodings%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
 Requires:         expat-devel
@@ -445,6 +460,8 @@ POCO applications.
 %{_libdir}/libPocoMongoDB.so
 %{_libdir}/libPocoMongoDBd.so
 %endif
+%{_libdir}/libPocoEncodings.so
+%{_libdir}/libPocoEncodingsd.so
 
 # -----------------------------------------------------------------------------
 %package          doc
@@ -465,6 +482,10 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Mar 13 2018 Scott Talbert <swt@techie.net> - 1.9.0-1
+- New upstream release 1.9.0
+- Add subpackage for new Encodings component
+
 * Mon Feb 19 2018 Scott Talbert <swt@techie.net> - 1.8.1-3
 - Add missing BR for gcc-c++
 
