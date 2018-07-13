@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -452,6 +452,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Fri Jun 29 2018 Scott Talbert <swt@techie.net> - 1.9.0-2
 - Remove ldconfig scriptlets (no longer needed on F28+)
 
