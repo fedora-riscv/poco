@@ -1,5 +1,7 @@
 %global poco_src_version 1.9.0
 %global gittag0 poco-1.9.0-release
+%global cmake_build cmake-build
+%global cmake_debug cmake-debug
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -23,7 +25,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          3%{?dist}
+Release:          4%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 Group:            Development/Libraries
@@ -36,7 +38,9 @@ Source0:          https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.
 Patch0:           disable-tests.patch
 # Add ignored-tests patches 
 Patch1:           ignored-tests.patch
+Patch2:           missing-encodings-dir.patch
 
+BuildRequires:    cmake
 BuildRequires:    gcc-c++
 BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
@@ -139,30 +143,42 @@ rm -f XML/src/xmltok_impl.h
 rm -f XML/src/xmltok_ns.c
 
 %build
-%if %{without tests}
-  %global poco_tests --no-tests
+%if %{with tests}
+  %global poco_tests -DENABLE_TESTS=ON
 %endif
 %if %{without samples}
   %global poco_samples --no-samples
 %endif
 %if %{without mongodb}
-  %global poco_omit --omit=PDF,CppParser,Redis,MongoDB
-%else
-  %global poco_omit --omit=PDF,CppParser,Redis
+  %global poco_mongodb -DENABLE_MONGODB=OFF
 %endif
-./configure --prefix=%{_prefix} --everything %{poco_omit} --unbundled %{?poco_tests} %{?poco_samples} --include-path=%{_includedir}/libiodbc --library-path=%{mysql_lib_dir}
-make -s %{?_smp_mflags} STRIP=/bin/true
+mkdir %{cmake_build}
+pushd %{cmake_build}
+%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIRECTORIES=%{_includedir}/libiodbc ..
+%make_build
+popd
+mkdir %{cmake_debug}
+pushd %{cmake_debug}
+%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIRECTORIES=%{_includedir}/libiodbc -DCMAKE_BUILD_TYPE=Debug ..
+%make_build
+popd
 
 %install
-make install DESTDIR=%{buildroot}
+pushd %{cmake_debug}
+%make_install
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
+popd
+pushd %{cmake_build}
+%make_install
+rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
+popd
 
 %check
 %if %{with tests}
-LIBPATH="$(pwd)/lib/Linux/$(uname -m)"
-export LD_LIBRARY_PATH=$LIBPATH
-POCO_BASE="$(pwd)"
-$POCO_BASE/travis/runtests.sh
+export POCO_BASE="$(pwd)"
+pushd %{cmake_build}
+ctest -V %{?_smp_mflags} -E "MongoDB|Redis"
+popd
 %endif
 
 # -----------------------------------------------------------------------------
@@ -359,8 +375,6 @@ application testing purposes.
 %{_libdir}/libPocoMongoDBd.so.*
 %endif
 %{_libdir}/libPocoEncodingsd.so.*
-%{_bindir}/cpspcd
-%{_bindir}/f2cpspd
 
 # -----------------------------------------------------------------------------
 %package          devel
@@ -432,6 +446,7 @@ POCO applications.
 %endif
 %{_libdir}/libPocoEncodings.so
 %{_libdir}/libPocoEncodingsd.so
+%{_libdir}/cmake/Poco
 
 # -----------------------------------------------------------------------------
 %package          doc
@@ -452,6 +467,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Aug 28 2018 Scott Talbert <swt@techie.net> - 1.9.0-4
+- Switch build to use cmake and include cmake files (#1587836)
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
