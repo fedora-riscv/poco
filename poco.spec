@@ -28,7 +28,6 @@ Version:          %{poco_src_version}
 Release:          4%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
-Group:            Development/Libraries
 License:          Boost
 URL:              https://pocoproject.org
 
@@ -184,7 +183,6 @@ popd
 # -----------------------------------------------------------------------------
 %package          foundation
 Summary:          The Foundation POCO component
-Group:            System Environment/Libraries
 
 %description foundation
 This package contains the Foundation component of POCO. (POCO is a set 
@@ -196,7 +194,6 @@ of C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          xml
 Summary:          The XML POCO component
-Group:            System Environment/Libraries
 
 %description xml
 This package contains the XML component of POCO. (POCO is a set of C++ 
@@ -207,7 +204,6 @@ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          util
 Summary:          The Util POCO component
-Group:            System Environment/Libraries
 
 %description util
 This package contains the Util component of POCO. (POCO is a set of C++ 
@@ -218,7 +214,6 @@ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          net
 Summary:          The Net POCO component
-Group:            System Environment/Libraries
 
 %description net
 This package contains the Net component of POCO. (POCO is a set of C++ 
@@ -229,7 +224,6 @@ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          crypto
 Summary:          The Crypto POCO component
-Group:            System Environment/Libraries
 
 %description crypto
 This package contains the Crypto component of POCO. (POCO is a set of 
@@ -240,7 +234,6 @@ C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          netssl
 Summary:          The NetSSL POCO component
-Group:            System Environment/Libraries
 
 %description netssl
 This package contains the NetSSL component of POCO. (POCO is a set of 
@@ -251,7 +244,6 @@ C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          data
 Summary:          The Data POCO component
-Group:            System Environment/Libraries
 
 %description data
 This package contains the Data component of POCO. (POCO is a set of 
@@ -262,7 +254,6 @@ C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          sqlite
 Summary:          The Data/SQLite POCO component
-Group:            System Environment/Libraries
 
 %description sqlite
 This package contains the Data/SQLite component of POCO. (POCO is a set 
@@ -273,7 +264,6 @@ of C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          odbc
 Summary:          The Data/ODBC POCO component
-Group:            System Environment/Libraries
 
 %description odbc
 This package contains the Data/ODBC component of POCO. (POCO is a set 
@@ -284,7 +274,6 @@ of C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          mysql
 Summary:          The Data/MySQL POCO component
-Group:            System Environment/Libraries
 
 %description mysql
 This package contains the Data/MySQL component of POCO. (POCO is a set 
@@ -295,7 +284,6 @@ of C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          zip
 Summary:          The Zip POCO component
-Group:            System Environment/Libraries
 
 %description zip
 This package contains the Zip component of POCO. (POCO is a set of C++ 
@@ -306,7 +294,6 @@ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          json
 Summary:          The JSON POCO component
-Group:            System Environment/Libraries
 
 %description json
 This package contains the JSON component of POCO. (POCO is a set of C++
@@ -318,7 +305,6 @@ class libraries for network-centric applications.)
 %if %{with mongodb}
 %package          mongodb
 Summary:          The MongoDB POCO component
-Group:            System Environment/Libraries
 
 %description mongodb
 This package contains the MongoDB component of POCO. (POCO is a set of C++
@@ -330,7 +316,6 @@ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          pagecompiler
 Summary:          The PageCompiler POCO component
-Group:            System Environment/Libraries
 
 %description pagecompiler
 This package contains the PageCompiler component of POCO. (POCO is a 
@@ -342,7 +327,6 @@ set of C++ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          encodings
 Summary:          The Encodings POCO component
-Group:            System Environment/Libraries
 
 %description encodings
 This package contains the Encodings component of POCO. (POCO is a set of C++
@@ -353,7 +337,6 @@ class libraries for network-centric applications.)
 # -----------------------------------------------------------------------------
 %package          debug
 Summary:          Debug builds of the POCO libraries
-Group:            Development/Libraries
 
 %description debug
 This package contains the debug builds of the POCO libraries for 
@@ -379,7 +362,6 @@ application testing purposes.
 # -----------------------------------------------------------------------------
 %package          devel
 Summary:          Headers for developing programs that will use POCO
-Group:            Development/Libraries
 
 Requires:         poco-debug%{?_isa} = %{version}-%{release}
 Requires:         poco-foundation%{?_isa} = %{version}-%{release}
@@ -451,7 +433,6 @@ POCO applications.
 # -----------------------------------------------------------------------------
 %package          doc
 Summary:          The POCO API reference documentation
-Group:            Documentation
 
 %description doc
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
