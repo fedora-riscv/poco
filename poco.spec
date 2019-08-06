@@ -1,5 +1,5 @@
-%global poco_src_version 1.9.0
-%global gittag0 poco-1.9.0-release
+%global poco_src_version 1.9.2
+%global gittag0 poco-1.9.2-release
 %global cmake_build cmake-build
 %global cmake_debug cmake-debug
 
@@ -25,7 +25,7 @@
 
 Name:             poco
 Version:          %{poco_src_version}
-Release:          6%{?dist}
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -448,6 +448,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Mon Aug 05 2019 Scott Talbert <swt@techie.net> - 1.9.2-1
+- Update to new upstream release 1.9.2
+
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
