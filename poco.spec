@@ -1,5 +1,5 @@
-%global poco_src_version 1.9.2
-%global gittag0 poco-1.9.2-release
+%global poco_src_version 1.9.3
+%global gittag0 poco-1.9.3-release
 %global cmake_build cmake-build
 %global cmake_debug cmake-debug
 
@@ -448,6 +448,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Wed Aug 21 2019 Scott Talbert <swt@techie.net> - 1.9.3-1
+- Update to new upstream release 1.9.3 (#1743851)
+
 * Mon Aug 05 2019 Scott Talbert <swt@techie.net> - 1.9.2-1
 - Update to new upstream release 1.9.2
 
