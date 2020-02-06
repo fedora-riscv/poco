@@ -1,5 +1,3 @@
-%global poco_src_version 1.9.4
-%global gittag0 poco-1.9.4-release
 %global cmake_build cmake-build
 %global cmake_debug cmake-debug
 
@@ -24,20 +22,22 @@
 %endif
 
 Name:             poco
-Version:          %{poco_src_version}
-Release:          2%{?dist}
+Version:          1.10.0
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
 URL:              https://pocoproject.org
 
-Source0:          https://github.com/pocoproject/%{name}/archive/%{gittag0}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:          https://github.com/pocoproject/%{name}/archive/%{name}-%{version}-release.tar.gz#/%{name}-%{version}.tar.gz
 
 # Disable the tests that will fail under Koji (mostly network)
 Patch0:           disable-tests.patch
-# Add ignored-tests patches 
-Patch1:           ignored-tests.patch
-Patch2:           missing-encodings-dir.patch
+Patch1:           poco-1.10.0-fix-unbundled-build1.patch
+Patch2:           poco-1.10.0-fix-unbundled-build2.patch
+Patch3:           set-sqlite-thread-mode.patch
+Patch4:           use-lib-suffix.patch
+Patch5:           dont-install-cppunit.patch
 
 BuildRequires:    cmake
 BuildRequires:    gcc-c++
@@ -63,7 +63,7 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-%autosetup -p1 -n %{name}-%{gittag0}
+%autosetup -p1 -n %{name}-%{name}-%{version}-release
 
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -153,12 +153,12 @@ rm -f XML/src/xmltok_ns.c
 %endif
 mkdir %{cmake_build}
 pushd %{cmake_build}
-%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIRECTORIES=%{_includedir}/libiodbc ..
+%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIR=%{_includedir}/libiodbc ..
 %make_build
 popd
 mkdir %{cmake_debug}
 pushd %{cmake_debug}
-%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIRECTORIES=%{_includedir}/libiodbc -DCMAKE_BUILD_TYPE=Debug ..
+%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIR=%{_includedir}/libiodbc -DCMAKE_BUILD_TYPE=Debug ..
 %make_build
 popd
 
@@ -176,7 +176,7 @@ popd
 %if %{with tests}
 export POCO_BASE="$(pwd)"
 pushd %{cmake_build}
-ctest -V %{?_smp_mflags} -E "MongoDB|Redis"
+ctest -V %{?_smp_mflags} -E "MongoDB|Redis|DataMySQL|DataODBC"
 popd
 %endif
 
@@ -335,6 +335,16 @@ class libraries for network-centric applications.)
 %{_libdir}/libPocoEncodings.so.*
 
 # -----------------------------------------------------------------------------
+%package          jwt
+Summary:          The JWT POCO component
+
+%description jwt
+This package contains the JWT component of POCO. (POCO is a set of C++
+class libraries for network-centric applications.)
+%files jwt
+%{_libdir}/libPocoJWT.so.*
+
+# -----------------------------------------------------------------------------
 %package          debug
 Summary:          Debug builds of the POCO libraries
 
@@ -358,6 +368,7 @@ application testing purposes.
 %{_libdir}/libPocoMongoDBd.so.*
 %endif
 %{_libdir}/libPocoEncodingsd.so.*
+%{_libdir}/libPocoJWTd.so.*
 
 # -----------------------------------------------------------------------------
 %package          devel
@@ -381,6 +392,7 @@ Requires:         poco-mongodb%{?_isa} = %{version}-%{release}
 %endif
 Requires:         poco-pagecompiler%{?_isa} = %{version}-%{release}
 Requires:         poco-encodings%{?_isa} = %{version}-%{release}
+Requires:         poco-jwt%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
 Requires:         expat-devel
@@ -428,6 +440,8 @@ POCO applications.
 %endif
 %{_libdir}/libPocoEncodings.so
 %{_libdir}/libPocoEncodingsd.so
+%{_libdir}/libPocoJWT.so
+%{_libdir}/libPocoJWTd.so
 %{_libdir}/cmake/Poco
 
 # -----------------------------------------------------------------------------
@@ -448,6 +462,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu Feb 06 2020 Scott Talbert <swt@techie.net> - 1.10.0-1
+- Update to new upstream release 1.10.0 (#1795299)
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 

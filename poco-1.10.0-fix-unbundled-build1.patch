@@ -1,0 +1,44 @@
+From 58e63be1620021a22601a26bed1e2861f5054970 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?G=C3=BCnter=20Obiltschnig?= <guenter.obiltschnig@appinf.com>
+Date: Tue, 4 Feb 2020 11:05:21 +0100
+Subject: [PATCH] #2894: Poco 1.10.0 doesn't build with cmake & POCO_UNBUNDLED
+
+---
+ cmake/PocoMacros.cmake | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/PocoMacros.cmake b/cmake/PocoMacros.cmake
+index 4490b7b644..14ebbb6c7e 100644
+--- a/cmake/PocoMacros.cmake
++++ b/cmake/PocoMacros.cmake
+@@ -233,20 +233,27 @@ configure_file("cmake/Poco${target_name}Config.cmake"
+   @ONLY
+ )
+ 
+-set(ConfigPackageLocation "lib/cmake/${PROJECT_NAME}")
++# Set config script install location in a location that find_package() will
++# look for, which is different on MS Windows than for UNIX
++# Note: also set in root CMakeLists.txt
++if (WIN32)
++	set(PocoConfigPackageLocation "cmake")
++else()
++	set(PocoConfigPackageLocation "lib/cmake/${PROJECT_NAME}")
++endif()
+ 
+ install(
+     EXPORT "${target_name}Targets"
+     FILE "${PROJECT_NAME}${target_name}Targets.cmake"
+     NAMESPACE "${PROJECT_NAME}::"
+-    DESTINATION "lib${LIB_SUFFIX}/cmake/${PROJECT_NAME}"
++    DESTINATION "${PocoConfigPackageLocation}"
+     )
+ 
+ install(
+     FILES
+         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}${target_name}Config.cmake"
+         "${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}${target_name}ConfigVersion.cmake"
+-    DESTINATION "lib${LIB_SUFFIX}/cmake/${PROJECT_NAME}"
++    DESTINATION "${PocoConfigPackageLocation}"
+     COMPONENT Devel
+     )
+ 

@@ -1,0 +1,23 @@
+From d9512077faff99b56855e9529f7887aeac01d556 Mon Sep 17 00:00:00 2001
+From: Scott Talbert <swt@techie.net>
+Date: Thu, 6 Feb 2020 15:46:50 -0500
+Subject: [PATCH] Don't install CppUnit
+
+---
+ CppUnit/CMakeLists.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/CppUnit/CMakeLists.txt b/CppUnit/CMakeLists.txt
+index e5d7f6523..2ef15c715 100644
+--- a/CppUnit/CMakeLists.txt
++++ b/CppUnit/CMakeLists.txt
+@@ -33,6 +33,3 @@ elseif(MINGW)
+ 		PUBLIC
+ 			_DLL)
+ endif()
+-
+-POCO_INSTALL(CppUnit)
+-
+-- 
+2.24.1
+
