@@ -1,0 +1,237 @@
+From 40929842565a5c4cac4886317ef4ab9de64a3ba7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?G=C3=BCnter=20Obiltschnig?= <guenter.obiltschnig@appinf.com>
+Date: Sat, 8 Feb 2020 20:25:00 +0100
+Subject: [PATCH] fix UTF16/UTF32Encoding wrong byte order handling on
+ bigendian
+
+---
+ Foundation/src/UTF16Encoding.cpp | 58 +++++++++++++++++---------------
+ Foundation/src/UTF32Encoding.cpp | 50 ++++++++++++++-------------
+ 2 files changed, 57 insertions(+), 51 deletions(-)
+
+diff --git a/Foundation/src/UTF16Encoding.cpp b/Foundation/src/UTF16Encoding.cpp
+index ea2ee8fe4f..ae7ac88733 100644
+--- a/Foundation/src/UTF16Encoding.cpp
++++ b/Foundation/src/UTF16Encoding.cpp
+@@ -28,24 +28,24 @@ const char* UTF16Encoding::_names[] =
+ };
+ 
+ 
+-const TextEncoding::CharacterMap UTF16Encoding::_charMap = 
++const TextEncoding::CharacterMap UTF16Encoding::_charMap =
+ {
+-	/* 00 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 10 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 20 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 30 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 40 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 50 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 60 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 70 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 80 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 90 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* a0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* b0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* c0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* d0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* e0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* f0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
++	/* 00 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 10 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 20 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 30 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 40 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 50 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 60 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 70 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 80 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 90 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* a0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* b0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* c0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* d0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* e0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* f0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
+ };
+ 
+ 
+@@ -54,13 +54,13 @@ UTF16Encoding::UTF16Encoding(ByteOrderType byteOrder)
+ 	setByteOrder(byteOrder);
+ }
+ 
+-	
++
+ UTF16Encoding::UTF16Encoding(int byteOrderMark)
+ {
+ 	setByteOrder(byteOrderMark);
+ }
+ 
+-	
++
+ UTF16Encoding::~UTF16Encoding()
+ {
+ }
+@@ -75,7 +75,7 @@ UTF16Encoding::ByteOrderType UTF16Encoding::getByteOrder() const
+ #endif
+ }
+ 
+-	
++
+ void UTF16Encoding::setByteOrder(ByteOrderType byteOrder)
+ {
+ #if defined(POCO_ARCH_BIG_ENDIAN)
+@@ -85,7 +85,7 @@ void UTF16Encoding::setByteOrder(ByteOrderType byteOrder)
+ #endif
+ }
+ 
+-	
++
+ void UTF16Encoding::setByteOrder(int byteOrderMark)
+ {
+ 	_flipBytes = byteOrderMark != 0xFEFF;
+@@ -124,7 +124,7 @@ int UTF16Encoding::convert(const unsigned char* bytes) const
+ 
+ 	if (_flipBytes)
+ 	{
+-		ByteOrder::flipBytes(uc);
++		uc = ByteOrder::flipBytes(uc);
+ 	}
+ 
+ 	if (uc >= 0xd800 && uc < 0xdc00)
+@@ -136,7 +136,7 @@ int UTF16Encoding::convert(const unsigned char* bytes) const
+ 
+ 		if (_flipBytes)
+ 		{
+-			ByteOrder::flipBytes(uc2);
++			uc2 = ByteOrder::flipBytes(uc2);
+ 		}
+ 		if (uc2 >= 0xdc00 && uc2 < 0xe000)
+ 		{
+@@ -201,8 +201,10 @@ int UTF16Encoding::queryConvert(const unsigned char* bytes, int length) const
+ 		unsigned char* p = (unsigned char*) &uc;
+ 		*p++ = *bytes++;
+ 		*p++ = *bytes++;
+-		if (_flipBytes) 
+-			ByteOrder::flipBytes(uc);
++		if (_flipBytes)
++		{
++			uc = ByteOrder::flipBytes(uc);
++		}
+ 		if (uc >= 0xd800 && uc < 0xdc00)
+ 		{
+ 			if (length >= 4)
+@@ -211,8 +213,10 @@ int UTF16Encoding::queryConvert(const unsigned char* bytes, int length) const
+ 				p = (unsigned char*) &uc2;
+ 				*p++ = *bytes++;
+ 				*p++ = *bytes++;
+-				if (_flipBytes) 
+-					ByteOrder::flipBytes(uc2);
++				if (_flipBytes)
++				{
++					uc2 = ByteOrder::flipBytes(uc2);
++				}
+ 				if (uc2 >= 0xdc00 && uc < 0xe000)
+ 				{
+ 					ret = ((uc & 0x3ff) << 10) + (uc2 & 0x3ff) + 0x10000;
+diff --git a/Foundation/src/UTF32Encoding.cpp b/Foundation/src/UTF32Encoding.cpp
+index ff07006a4f..47a0156b0e 100644
+--- a/Foundation/src/UTF32Encoding.cpp
++++ b/Foundation/src/UTF32Encoding.cpp
+@@ -28,24 +28,24 @@ const char* UTF32Encoding::_names[] =
+ };
+ 
+ 
+-const TextEncoding::CharacterMap UTF32Encoding::_charMap = 
++const TextEncoding::CharacterMap UTF32Encoding::_charMap =
+ {
+-	/* 00 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 10 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 20 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 30 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 40 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 50 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 60 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 70 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 80 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* 90 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* a0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* b0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* c0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* d0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* e0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
+-	/* f0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, 
++	/* 00 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 10 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 20 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 30 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 40 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 50 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 60 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 70 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 80 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* 90 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* a0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* b0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* c0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* d0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* e0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
++	/* f0 */	-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
+ };
+ 
+ 
+@@ -54,13 +54,13 @@ UTF32Encoding::UTF32Encoding(ByteOrderType byteOrder)
+ 	setByteOrder(byteOrder);
+ }
+ 
+-	
++
+ UTF32Encoding::UTF32Encoding(int byteOrderMark)
+ {
+ 	setByteOrder(byteOrderMark);
+ }
+ 
+-	
++
+ UTF32Encoding::~UTF32Encoding()
+ {
+ }
+@@ -75,7 +75,7 @@ UTF32Encoding::ByteOrderType UTF32Encoding::getByteOrder() const
+ #endif
+ }
+ 
+-	
++
+ void UTF32Encoding::setByteOrder(ByteOrderType byteOrder)
+ {
+ #if defined(POCO_ARCH_BIG_ENDIAN)
+@@ -85,7 +85,7 @@ void UTF32Encoding::setByteOrder(ByteOrderType byteOrder)
+ #endif
+ }
+ 
+-	
++
+ void UTF32Encoding::setByteOrder(int byteOrderMark)
+ {
+ 	_flipBytes = byteOrderMark != 0xFEFF;
+@@ -126,7 +126,7 @@ int UTF32Encoding::convert(const unsigned char* bytes) const
+ 
+ 	if (_flipBytes)
+ 	{
+-		ByteOrder::flipBytes(uc);
++		uc = ByteOrder::flipBytes(uc);
+ 	}
+ 
+ 	return uc;
+@@ -160,8 +160,10 @@ int UTF32Encoding::queryConvert(const unsigned char* bytes, int length) const
+ 		*p++ = *bytes++;
+ 		*p++ = *bytes++;
+ 		*p++ = *bytes++;
+-		if (_flipBytes) 
+-			ByteOrder::flipBytes(uc);
++		if (_flipBytes)
++		{
++			uc = ByteOrder::flipBytes(uc);
++		}
+ 		return uc;
+ 	}
+ 

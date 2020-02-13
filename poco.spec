@@ -38,6 +38,8 @@ Patch2:           poco-1.10.0-fix-unbundled-build2.patch
 Patch3:           set-sqlite-thread-mode.patch
 Patch4:           use-lib-suffix.patch
 Patch5:           dont-install-cppunit.patch
+Patch6:           fix-sha2engine-big-endian.patch
+Patch7:           fix-utf1632encoding-big-endian.patch
 
 BuildRequires:    cmake
 BuildRequires:    gcc-c++
