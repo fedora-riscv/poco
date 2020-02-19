@@ -22,7 +22,7 @@
 %endif
 
 Name:             poco
-Version:          1.10.0
+Version:          1.10.1
 Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
@@ -33,13 +33,6 @@ Source0:          https://github.com/pocoproject/%{name}/archive/%{name}-%{versi
 
 # Disable the tests that will fail under Koji (mostly network)
 Patch0:           disable-tests.patch
-Patch1:           poco-1.10.0-fix-unbundled-build1.patch
-Patch2:           poco-1.10.0-fix-unbundled-build2.patch
-Patch3:           set-sqlite-thread-mode.patch
-Patch4:           use-lib-suffix.patch
-Patch5:           dont-install-cppunit.patch
-Patch6:           fix-sha2engine-big-endian.patch
-Patch7:           fix-utf1632encoding-big-endian.patch
 
 BuildRequires:    cmake
 BuildRequires:    gcc-c++
@@ -464,6 +457,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Feb 18 2020 Scott Talbert <swt@techie.net> - 1.10.1-1
+- Update to new upstream release 1.10.1 (#1803758)
+
 * Thu Feb 06 2020 Scott Talbert <swt@techie.net> - 1.10.0-1
 - Update to new upstream release 1.10.0 (#1795299)
 
