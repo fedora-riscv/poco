@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          1.10.1
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -457,6 +457,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Tue Feb 18 2020 Scott Talbert <swt@techie.net> - 1.10.1-1
 - Update to new upstream release 1.10.1 (#1803758)
 
