@@ -1,5 +1,5 @@
-%global cmake_build cmake-build
-%global cmake_debug cmake-debug
+%global cmake_build_dir cmake-build
+%global cmake_debug_dir cmake-debug
 
 # build without tests on s390 (runs out of memory during linking due the 2 GB address space)
 %ifnarch s390
@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          1.10.1
-Release:          3%{?dist}
+Release:          4%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -146,31 +146,21 @@ rm -f XML/src/xmltok_ns.c
 %if %{without mongodb}
   %global poco_mongodb -DENABLE_MONGODB=OFF
 %endif
-mkdir %{cmake_build}
-pushd %{cmake_build}
-%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIR=%{_includedir}/libiodbc ..
-%make_build
-popd
-mkdir %{cmake_debug}
-pushd %{cmake_debug}
-%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIR=%{_includedir}/libiodbc -DCMAKE_BUILD_TYPE=Debug ..
-%make_build
-popd
+%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIR=%{_includedir}/libiodbc -B %{cmake_build_dir}
+%make_build -C %{cmake_build_dir}
+%cmake -DPOCO_UNBUNDLED=ON %{?poco_tests} %{?poco_mongodb} -DENABLE_REDIS=OFF -DODBC_INCLUDE_DIR=%{_includedir}/libiodbc -DCMAKE_BUILD_TYPE=Debug -B %{cmake_debug_dir}
+%make_build -C %{cmake_debug_dir}
 
 %install
-pushd %{cmake_debug}
-%make_install
+%make_install -C %{cmake_debug_dir}
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
-popd
-pushd %{cmake_build}
-%make_install
+%make_install -C %{cmake_build_dir}
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
-popd
 
 %check
 %if %{with tests}
 export POCO_BASE="$(pwd)"
-pushd %{cmake_build}
+pushd %{cmake_build_dir}
 ctest -V %{?_smp_mflags} -E "MongoDB|Redis|DataMySQL|DataODBC"
 popd
 %endif
@@ -457,6 +447,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu Jul 30 2020 Scott Talbert <swt@techie.net> - 1.10.1-4
+- Adapt to cmake out-of-source build changes
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-3
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
