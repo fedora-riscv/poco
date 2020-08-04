@@ -33,6 +33,10 @@ Source0:          https://github.com/pocoproject/%{name}/archive/%{name}-%{versi
 
 # Disable the tests that will fail under Koji (mostly network)
 Patch0:           disable-tests.patch
+# Generated a new test certificate (the old one uses a weak algorithm which
+# is rejected by current OpenSSL) using:
+# openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 3650
+Patch1:           fix-old-test-cert.patch
 
 BuildRequires:    cmake
 BuildRequires:    gcc-c++
@@ -449,6 +453,7 @@ HTML format.
 %changelog
 * Thu Jul 30 2020 Scott Talbert <swt@techie.net> - 1.10.1-4
 - Adapt to cmake out-of-source build changes
+- Replace old SSL testsuite cert which was rejected by OpenSSL (#1865242)
 
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-3
 - Second attempt - Rebuilt for
