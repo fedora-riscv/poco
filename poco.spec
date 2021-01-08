@@ -38,6 +38,7 @@ Patch0:           disable-tests.patch
 # openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 3650
 Patch1:           fix-old-test-cert.patch
 
+BuildRequires: make
 BuildRequires:    cmake
 BuildRequires:    gcc-c++
 BuildRequires:    openssl-devel
