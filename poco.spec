@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          1.10.1
-Release:          4%{?dist}
+Release:          5%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -452,6 +452,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Thu Jul 30 2020 Scott Talbert <swt@techie.net> - 1.10.1-4
 - Adapt to cmake out-of-source build changes
 - Replace old SSL testsuite cert which was rejected by OpenSSL (#1865242)
