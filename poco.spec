@@ -22,8 +22,8 @@
 %endif
 
 Name:             poco
-Version:          1.10.1
-Release:          5%{?dist}
+Version:          1.11.0
+Release:          1%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -33,12 +33,10 @@ Source0:          https://github.com/pocoproject/%{name}/archive/%{name}-%{versi
 
 # Disable the tests that will fail under Koji (mostly network)
 Patch0:           disable-tests.patch
-# Generated a new test certificate (the old one uses a weak algorithm which
-# is rejected by current OpenSSL) using:
-# openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 3650
-Patch1:           fix-old-test-cert.patch
+# Fix XML compilation due to new methods being guarded by XML_DTD
+Patch1:           define-xml-dtd.patch
 
-BuildRequires: make
+BuildRequires:    make
 BuildRequires:    cmake
 BuildRequires:    gcc-c++
 BuildRequires:    openssl-devel
@@ -70,7 +68,6 @@ including the standard library.
 /bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
 /bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
-/bin/sed -i.orig -e 's|PDF|Data/SQLite PDF|' travis/runtests.sh
 /bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
 
 rm -f Foundation/src/MSG00001.bin
@@ -161,6 +158,7 @@ rm -f XML/src/xmltok_ns.c
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
 %make_install -C %{cmake_build_dir}
 rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
+rm -f %{buildroot}%{_bindir}/arc
 
 %check
 %if %{with tests}
@@ -335,6 +333,16 @@ class libraries for network-centric applications.)
 %{_libdir}/libPocoJWT.so.*
 
 # -----------------------------------------------------------------------------
+%package          activerecord
+Summary:          The ActiveRecord POCO component
+
+%description activerecord
+This package contains the ActiveRecord component of POCO. (POCO is a set of C++
+class libraries for network-centric applications.)
+%files activerecord
+%{_libdir}/libPocoActiveRecord.so.*
+
+# -----------------------------------------------------------------------------
 %package          debug
 Summary:          Debug builds of the POCO libraries
 
@@ -359,6 +367,7 @@ application testing purposes.
 %endif
 %{_libdir}/libPocoEncodingsd.so.*
 %{_libdir}/libPocoJWTd.so.*
+%{_libdir}/libPocoActiveRecordd.so.*
 
 # -----------------------------------------------------------------------------
 %package          devel
@@ -383,6 +392,7 @@ Requires:         poco-mongodb%{?_isa} = %{version}-%{release}
 Requires:         poco-pagecompiler%{?_isa} = %{version}-%{release}
 Requires:         poco-encodings%{?_isa} = %{version}-%{release}
 Requires:         poco-jwt%{?_isa} = %{version}-%{release}
+Requires:         poco-activerecord%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
 Requires:         expat-devel
@@ -432,6 +442,8 @@ POCO applications.
 %{_libdir}/libPocoEncodingsd.so
 %{_libdir}/libPocoJWT.so
 %{_libdir}/libPocoJWTd.so
+%{_libdir}/libPocoActiveRecord.so
+%{_libdir}/libPocoActiveRecordd.so
 %{_libdir}/cmake/Poco
 
 # -----------------------------------------------------------------------------
@@ -452,6 +464,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu Jul 15 2021 Scott Talbert <swt@techie.net> - 1.11.0-1
+- Update to new upstream release 1.11.0 (#1976784)
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 

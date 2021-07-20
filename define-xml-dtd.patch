@@ -1,0 +1,13 @@
+diff --git a/XML/CMakeLists.txt b/XML/CMakeLists.txt
+index 4fbf06f96..b997ec6c0 100644
+--- a/XML/CMakeLists.txt
++++ b/XML/CMakeLists.txt
+@@ -51,7 +51,7 @@ target_include_directories(XML
+ 
+ if(POCO_UNBUNDLED)
+ 	target_link_libraries(XML PUBLIC EXPAT::EXPAT)
+-	target_compile_definitions(XML PUBLIC POCO_UNBUNDLED)
++	target_compile_definitions(XML PUBLIC POCO_UNBUNDLED XML_DTD)
+ else()
+ 	if(WIN32)
+ 		#TODO: Is XML_STATIC only required with Windows? What does it do?
