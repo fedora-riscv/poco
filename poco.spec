@@ -23,7 +23,7 @@
 
 Name:             poco
 Version:          1.11.0
-Release:          3%{?dist}
+Release:          4%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -395,6 +395,7 @@ Requires:         poco-jwt%{?_isa} = %{version}-%{release}
 Requires:         poco-activerecord%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
+Requires:         pcre-devel
 Requires:         expat-devel
 Requires:         openssl-devel
 
@@ -464,6 +465,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Mon Oct 04 2021 Milivoje Legenovic <m.legenovic@gmail.com> - 1.11.0-4
+- poco-devel requires pcre-devel
+
 * Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 1.11.0-3
 - Rebuilt with OpenSSL 3.0.0
 
