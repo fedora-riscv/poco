@@ -1,3 +1,10 @@
+# https://github.com/pocoproject/poco/issues/3415
+# https://github.com/pocoproject/poco/issues/3516
+# https://github.com/pocoproject/poco/tree/poco-1.11.2
+%global commit      5a0b18246ba744389d7733631d4ee565ea6b3111
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global commitdate  20220328
+
 %global cmake_build_dir cmake-build
 %global cmake_debug_dir cmake-debug
 
@@ -22,17 +29,17 @@
 %endif
 
 Name:             poco
-Version:          1.11.0
-Release:          5%{?dist}
+Version:          1.11.2
+Release:          0.1.%{commitdate}git%{shortcommit}%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
 URL:              https://pocoproject.org
 
-Source0:          https://github.com/pocoproject/%{name}/archive/%{name}-%{version}-release.tar.gz#/%{name}-%{version}.tar.gz
+Source:           https://github.com/pocoproject/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 # Disable the tests that will fail under Koji (mostly network)
-Patch0:           disable-tests.patch
+Patch0:           0001-Disable-tests-that-fail-in-koji.patch
 # Fix XML compilation due to new methods being guarded by XML_DTD
 Patch1:           define-xml-dtd.patch
 
@@ -61,7 +68,7 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-%autosetup -p1 -n %{name}-%{name}-%{version}-release
+%autosetup -p1 -n %{name}-%{commit}
 
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 /bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
@@ -465,6 +472,10 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Wed Mar 30 2022 Carl George <carl@george.computer> - 1.11.2-0.1.20220328git5a0b182
+- Update to a snapshot of the upstream 1.11.2 branch for openssl 3 compatibility
+- Resolves: rhbz#2021939
+
 * Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
