@@ -4,6 +4,7 @@
 %global commit      5a0b18246ba744389d7733631d4ee565ea6b3111
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global commitdate  20220328
+%global _bundled_pcre_version 8.45
 
 %global cmake_build_dir cmake-build
 %global cmake_debug_dir cmake-debug
@@ -58,7 +59,7 @@ BuildRequires:    libtool-ltdl-devel
 # We build poco to unbundle as much as possible, but unfortunately, it uses
 # some internal functions of pcre so there are a few files from pcre that are
 # still bundled.  See https://github.com/pocoproject/poco/issues/120.
-Provides:         bundled(pcre) = 8.35
+Provides:         bundled(pcre) = %{_bundled_pcre_version}
 
 %description
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
@@ -70,80 +71,65 @@ including the standard library.
 %prep
 %autosetup -p1 -n %{name}-%{commit}
 
+# Fix libdir for Fedora
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
-/bin/sed -i.orig -e 's|ODBCLIBDIR = /usr/lib\b|ODBCLIBDIR = %{_libdir}|g' Data/ODBC/Makefile Data/ODBC/testsuite/Makefile
-/bin/sed -i.orig -e 's|flags=""|flags="%{optflags}"|g' configure
+cmp Makefile{,.orig} && exit 1
+# Disable rpath
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
-/bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
-/bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
+cmp build/config/Linux{,.orig} && exit 1
 
-rm -f Foundation/src/MSG00001.bin
-rm -f Foundation/include/Poco/zconf.h
-rm -f Foundation/include/Poco/zlib.h
-rm -f Foundation/src/adler32.c
-rm -f Foundation/src/compress.c
-rm -f Foundation/src/crc32.c
-rm -f Foundation/src/crc32.h
-rm -f Foundation/src/deflate.c
-rm -f Foundation/src/deflate.h
-rm -f Foundation/src/gzguts.h
-rm -f Foundation/src/gzio.c
-rm -f Foundation/src/infback.c
-rm -f Foundation/src/inffast.c
-rm -f Foundation/src/inffast.h
-rm -f Foundation/src/inffixed.h
-rm -f Foundation/src/inflate.c
-rm -f Foundation/src/inflate.h
-rm -f Foundation/src/inftrees.c
-rm -f Foundation/src/inftrees.h
-rm -f Foundation/src/trees.c
-rm -f Foundation/src/trees.h
-rm -f Foundation/src/zconf.h
-rm -f Foundation/src/zlib.h
-rm -f Foundation/src/zutil.c
-rm -f Foundation/src/zutil.h
+rm -v Foundation/src/MSG00001.bin
+rm -v Foundation/include/Poco/zconf.h
+rm -v Foundation/include/Poco/zlib.h
+rm -v Foundation/src/adler32.c
+rm -v Foundation/src/compress.c
+rm -v Foundation/src/crc32.c
+rm -v Foundation/src/crc32.h
+rm -v Foundation/src/deflate.c
+rm -v Foundation/src/deflate.h
+rm -v Foundation/src/gzguts.h
+rm -v PDF/src/gzio.c
+rm -v Foundation/src/infback.c
+rm -v Foundation/src/inffast.c
+rm -v Foundation/src/inffast.h
+rm -v Foundation/src/inffixed.h
+rm -v Foundation/src/inflate.c
+rm -v Foundation/src/inflate.h
+rm -v Foundation/src/inftrees.c
+rm -v Foundation/src/inftrees.h
+rm -v Foundation/src/trees.c
+rm -v Foundation/src/trees.h
+rm -v Foundation/src/zconf.h
+rm -v Foundation/src/zlib.h
+rm -v Foundation/src/zutil.c
+rm -v Foundation/src/zutil.h
+
 # PCRE files that can't be removed due to still being bundled:
 #   pcre.h pcre_config.h pcre_internal.h pcre_tables.c pcre_ucd.c
-rm -f Foundation/src/pcre_byte_order.c
-rm -f Foundation/src/pcre_chartables.c
-rm -f Foundation/src/pcre_compile.c
-rm -f Foundation/src/pcre_config.c
-rm -f Foundation/src/pcre_dfa_exec.c
-rm -f Foundation/src/pcre_exec.c
-rm -f Foundation/src/pcre_fullinfo.c
-rm -f Foundation/src/pcre_get.c
-rm -f Foundation/src/pcre_globals.c
-rm -f Foundation/src/pcre_jit_compile.c
-rm -f Foundation/src/pcre_maketables.c
-rm -f Foundation/src/pcre_newline.c
-rm -f Foundation/src/pcre_ord2utf8.c
-rm -f Foundation/src/pcre_refcount.c
-rm -f Foundation/src/pcre_string_utils.c
-rm -f Foundation/src/pcre_study.c
-rm -f Foundation/src/pcre_try_flipped.c
-rm -f Foundation/src/pcre_valid_utf8.c
-rm -f Foundation/src/pcre_version.c
-rm -f Foundation/src/pcre_xclass.c
-rm -f Data/SQLite/src/sqlite3.h
-rm -f Data/SQLite/src/sqlite3.c
-rm -f XML/include/Poco/XML/expat.h
-rm -f XML/include/Poco/XML/expat_external.h
-rm -f XML/src/ascii.h
-rm -f XML/src/asciitab.h
-rm -f XML/src/expat_config.h
-rm -f XML/src/iasciitab.h
-rm -f XML/src/internal.h
-rm -f XML/src/latin1tab.h
-rm -f XML/src/nametab.h
-rm -f XML/src/utf8tab.h
-rm -f XML/src/xmlparse.cpp
-rm -f XML/src/xmlrole.c
-rm -f XML/src/xmlrole.h
-rm -f XML/src/xmltok.c
-rm -f XML/src/xmltok.h
-rm -f XML/src/xmltok_impl.c
-rm -f XML/src/xmltok_impl.h
-rm -f XML/src/xmltok_ns.c
+mv -v Foundation/src/pcre_{config.h,internal.h,tables.c,ucd.c} .
+rm -v Foundation/src/pcre_*
+mv -v pcre_* Foundation/src
+
+rm -v Data/SQLite/src/sqlite3.h
+rm -v Data/SQLite/src/sqlite3.c
+rm -v XML/include/Poco/XML/expat.h
+rm -v XML/include/Poco/XML/expat_external.h
+rm -v XML/src/ascii.h
+rm -v XML/src/asciitab.h
+rm -v XML/src/expat_config.h
+rm -v XML/src/iasciitab.h
+rm -v XML/src/internal.h
+rm -v XML/src/latin1tab.h
+rm -v XML/src/nametab.h
+rm -v XML/src/utf8tab.h
+rm -v XML/src/xmlparse.cpp
+rm -v XML/src/xmlrole.c
+rm -v XML/src/xmlrole.h
+rm -v XML/src/xmltok.c
+rm -v XML/src/xmltok.h
+rm -v XML/src/xmltok_impl.c
+rm -v XML/src/xmltok_impl.h
+rm -v XML/src/xmltok_ns.c
 
 %build
 %if %{with tests}
@@ -162,10 +148,9 @@ rm -f XML/src/xmltok_ns.c
 
 %install
 %make_install -C %{cmake_debug_dir}
-rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
 %make_install -C %{cmake_build_dir}
-rm -f %{buildroot}%{_prefix}/include/Poco/Config.h.orig
-rm -f %{buildroot}%{_bindir}/arc
+# conflict with arc
+rm -v %{buildroot}%{_bindir}/arc
 
 %check
 %if %{with tests}
@@ -183,6 +168,7 @@ Summary:          The Foundation POCO component
 This package contains the Foundation component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
 %files foundation
+%license LICENSE
 %{_libdir}/libPocoFoundation.so.*
 
 
@@ -417,6 +403,7 @@ This package contains the header files needed for developing
 POCO applications.
 
 %files devel
+%doc CHANGELOG CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS README*
 %{_includedir}/Poco
 %{_libdir}/libPocoFoundation.so
 %{_libdir}/libPocoFoundationd.so
@@ -472,6 +459,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Thu Mar 31 2022 Robin Lee <cheeselee@fedoraproject.org> - 1.11.2-0.1.20220328git5a0b182
+- Minor specfile cleanups
+
 * Wed Mar 30 2022 Carl George <carl@george.computer> - 1.11.2-0.1.20220328git5a0b182
 - Update to a snapshot of the upstream 1.11.2 branch for openssl 3 compatibility
 - Resolves: rhbz#2021939
@@ -741,4 +731,3 @@ was added.
 
 * Sat Jun 20 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-1
 - The first version.
-
