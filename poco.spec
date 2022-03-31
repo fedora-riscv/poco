@@ -74,7 +74,6 @@ including the standard library.
 
 # Fix libdir for Fedora
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
-cmp Makefile{,.orig} && exit 1
 # Disable rpath
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
 cmp build/config/Linux{,.orig} && exit 1
