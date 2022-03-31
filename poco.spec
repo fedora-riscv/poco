@@ -5,6 +5,7 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global commitdate  20220328
 %global _bundled_pcre_version 8.45
+%global libversion 82
 
 %global cmake_build_dir cmake-build
 %global cmake_debug_dir cmake-debug
@@ -169,7 +170,7 @@ This package contains the Foundation component of POCO. (POCO is a set
 of C++ class libraries for network-centric applications.)
 %files foundation
 %license LICENSE
-%{_libdir}/libPocoFoundation.so.*
+%{_libdir}/libPocoFoundation.so.%{libversion}
 
 
 # -----------------------------------------------------------------------------
@@ -180,7 +181,7 @@ Summary:          The XML POCO component
 This package contains the XML component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
 %files xml
-%{_libdir}/libPocoXML.so.*
+%{_libdir}/libPocoXML.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          util
@@ -190,7 +191,7 @@ Summary:          The Util POCO component
 This package contains the Util component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
 %files util
-%{_libdir}/libPocoUtil.so.*
+%{_libdir}/libPocoUtil.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          net
@@ -200,7 +201,7 @@ Summary:          The Net POCO component
 This package contains the Net component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
 %files net
-%{_libdir}/libPocoNet.so.*
+%{_libdir}/libPocoNet.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          crypto
@@ -210,7 +211,7 @@ Summary:          The Crypto POCO component
 This package contains the Crypto component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
 %files crypto
-%{_libdir}/libPocoCrypto.so.*
+%{_libdir}/libPocoCrypto.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          netssl
@@ -220,7 +221,7 @@ Summary:          The NetSSL POCO component
 This package contains the NetSSL component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
 %files netssl
-%{_libdir}/libPocoNetSSL.so.*
+%{_libdir}/libPocoNetSSL.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          data
@@ -230,7 +231,7 @@ Summary:          The Data POCO component
 This package contains the Data component of POCO. (POCO is a set of 
 C++ class libraries for network-centric applications.)
 %files data
-%{_libdir}/libPocoData.so.*
+%{_libdir}/libPocoData.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          sqlite
@@ -240,7 +241,7 @@ Summary:          The Data/SQLite POCO component
 This package contains the Data/SQLite component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
 %files sqlite
-%{_libdir}/libPocoDataSQLite.so.*
+%{_libdir}/libPocoDataSQLite.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          odbc
@@ -250,7 +251,7 @@ Summary:          The Data/ODBC POCO component
 This package contains the Data/ODBC component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
 %files odbc
-%{_libdir}/libPocoDataODBC.so.*
+%{_libdir}/libPocoDataODBC.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          mysql
@@ -260,7 +261,7 @@ Summary:          The Data/MySQL POCO component
 This package contains the Data/MySQL component of POCO. (POCO is a set 
 of C++ class libraries for network-centric applications.)
 %files mysql
-%{_libdir}/libPocoDataMySQL.so.*
+%{_libdir}/libPocoDataMySQL.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          zip
@@ -270,7 +271,7 @@ Summary:          The Zip POCO component
 This package contains the Zip component of POCO. (POCO is a set of C++ 
 class libraries for network-centric applications.)
 %files zip
-%{_libdir}/libPocoZip.so.*
+%{_libdir}/libPocoZip.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          json
@@ -280,7 +281,7 @@ Summary:          The JSON POCO component
 This package contains the JSON component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
 %files json
-%{_libdir}/libPocoJSON.so.*
+%{_libdir}/libPocoJSON.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %if %{with mongodb}
@@ -291,7 +292,7 @@ Summary:          The MongoDB POCO component
 This package contains the MongoDB component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
 %files mongodb
-%{_libdir}/libPocoMongoDB.so.*
+%{_libdir}/libPocoMongoDB.so.%{libversion}
 %endif
 
 # -----------------------------------------------------------------------------
@@ -313,7 +314,7 @@ Summary:          The Encodings POCO component
 This package contains the Encodings component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
 %files encodings
-%{_libdir}/libPocoEncodings.so.*
+%{_libdir}/libPocoEncodings.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          jwt
@@ -323,7 +324,7 @@ Summary:          The JWT POCO component
 This package contains the JWT component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
 %files jwt
-%{_libdir}/libPocoJWT.so.*
+%{_libdir}/libPocoJWT.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          activerecord
@@ -333,7 +334,7 @@ Summary:          The ActiveRecord POCO component
 This package contains the ActiveRecord component of POCO. (POCO is a set of C++
 class libraries for network-centric applications.)
 %files activerecord
-%{_libdir}/libPocoActiveRecord.so.*
+%{_libdir}/libPocoActiveRecord.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          debug
@@ -343,24 +344,24 @@ Summary:          Debug builds of the POCO libraries
 This package contains the debug builds of the POCO libraries for 
 application testing purposes.
 %files debug
-%{_libdir}/libPocoFoundationd.so.*
-%{_libdir}/libPocoXMLd.so.*
-%{_libdir}/libPocoUtild.so.*
-%{_libdir}/libPocoNetd.so.*
-%{_libdir}/libPocoCryptod.so.*
-%{_libdir}/libPocoNetSSLd.so.*
-%{_libdir}/libPocoDatad.so.*
-%{_libdir}/libPocoDataSQLited.so.*
-%{_libdir}/libPocoDataODBCd.so.*
-%{_libdir}/libPocoDataMySQLd.so.*
-%{_libdir}/libPocoZipd.so.*
-%{_libdir}/libPocoJSONd.so.*
+%{_libdir}/libPocoFoundationd.so.%{libversion}
+%{_libdir}/libPocoXMLd.so.%{libversion}
+%{_libdir}/libPocoUtild.so.%{libversion}
+%{_libdir}/libPocoNetd.so.%{libversion}
+%{_libdir}/libPocoCryptod.so.%{libversion}
+%{_libdir}/libPocoNetSSLd.so.%{libversion}
+%{_libdir}/libPocoDatad.so.%{libversion}
+%{_libdir}/libPocoDataSQLited.so.%{libversion}
+%{_libdir}/libPocoDataODBCd.so.%{libversion}
+%{_libdir}/libPocoDataMySQLd.so.%{libversion}
+%{_libdir}/libPocoZipd.so.%{libversion}
+%{_libdir}/libPocoJSONd.so.%{libversion}
 %if %{with mongodb}
-%{_libdir}/libPocoMongoDBd.so.*
+%{_libdir}/libPocoMongoDBd.so.%{libversion}
 %endif
-%{_libdir}/libPocoEncodingsd.so.*
-%{_libdir}/libPocoJWTd.so.*
-%{_libdir}/libPocoActiveRecordd.so.*
+%{_libdir}/libPocoEncodingsd.so.%{libversion}
+%{_libdir}/libPocoJWTd.so.%{libversion}
+%{_libdir}/libPocoActiveRecordd.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          devel
@@ -461,6 +462,7 @@ HTML format.
 %changelog
 * Thu Mar 31 2022 Robin Lee <cheeselee@fedoraproject.org> - 1.11.2-0.1.20220328git5a0b182
 - Minor specfile cleanups
+- SO version is hard-coded to prevent implicit soname bump
 
 * Wed Mar 30 2022 Carl George <carl@george.computer> - 1.11.2-0.1.20220328git5a0b182
 - Update to a snapshot of the upstream 1.11.2 branch for openssl 3 compatibility
