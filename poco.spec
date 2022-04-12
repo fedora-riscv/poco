@@ -32,7 +32,7 @@
 
 Name:             poco
 Version:          1.11.2
-Release:          0.1.%{commitdate}git%{shortcommit}%{?dist}
+Release:          0.2.%{commitdate}git%{shortcommit}%{?dist}
 Summary:          C++ class libraries for network-centric applications
 
 License:          Boost
@@ -76,6 +76,8 @@ including the standard library.
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
 # Disable rpath
 /bin/sed -i.orig -e 's|SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)|SHAREDOPT_LINK  =|g' build/config/Linux
+/bin/sed -i.orig -e 's|"Poco/zlib.h"|<zlib.h>|g' Zip/src/ZipStream.cpp
+/bin/sed -i.orig -e 's|#endif|#define POCO_UNBUNDLED 1\n\n#endif|g' Foundation/include/Poco/Config.h
 cmp build/config/Linux{,.orig} && exit 1
 
 rm -v Foundation/src/MSG00001.bin
@@ -459,6 +461,9 @@ HTML format.
 %doc README NEWS LICENSE CONTRIBUTORS CHANGELOG doc/*
 
 %changelog
+* Mon Apr 11 2022 Sérgio Basto <sergio@serjux.com> - 1.11.2-0.2.20220328git5a0b182
+- Readd scriplets to make it work the unbundle of expat and zilb
+
 * Thu Mar 31 2022 Robin Lee <cheeselee@fedoraproject.org> - 1.11.2-0.1.20220328git5a0b182
 - Minor specfile cleanups
 - SO version is hard-coded to prevent implicit soname bump
