@@ -1,0 +1,276 @@
+* Mon Apr 11 2022 Sérgio Basto <sergio@serjux.com> - 1.11.2-0.2.20220328git5a0b182
+- Readd scriplets to make it work the unbundle of expat and zilb
+
+* Thu Mar 31 2022 Robin Lee <cheeselee@fedoraproject.org> - 1.11.2-0.1.20220328git5a0b182
+- Minor specfile cleanups
+- SO version is hard-coded to prevent implicit soname bump
+
+* Wed Mar 30 2022 Carl George <carl@george.computer> - 1.11.2-0.1.20220328git5a0b182
+- Update to a snapshot of the upstream 1.11.2 branch for openssl 3 compatibility
+- Resolves: rhbz#2021939
+
+* Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Mon Oct 04 2021 Milivoje Legenovic <m.legenovic@gmail.com> - 1.11.0-4
+- poco-devel requires pcre-devel
+
+* Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 1.11.0-3
+- Rebuilt with OpenSSL 3.0.0
+
+* Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.11.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Thu Jul 15 2021 Scott Talbert <swt@techie.net> - 1.11.0-1
+- Update to new upstream release 1.11.0 (#1976784)
+
+* Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Mon Aug 03 2020 Scott Talbert <swt@techie.net> - 1.10.1-4
+- Adapt to cmake out-of-source build changes
+- Replace old SSL testsuite cert which was rejected by OpenSSL (#1865242)
+
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-3
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue Feb 18 2020 Scott Talbert <swt@techie.net> - 1.10.1-1
+- Update to new upstream release 1.10.1 (#1803758)
+
+* Thu Feb 06 2020 Scott Talbert <swt@techie.net> - 1.10.0-1
+- Update to new upstream release 1.10.0 (#1795299)
+
+* Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Thu Sep 19 2019 Scott Talbert <swt@techie.net> - 1.9.4-1
+- Update to new upstream release 1.9.4 (#1753136)
+
+* Wed Aug 21 2019 Scott Talbert <swt@techie.net> - 1.9.3-1
+- Update to new upstream release 1.9.3 (#1743851)
+
+* Mon Aug 05 2019 Scott Talbert <swt@techie.net> - 1.9.2-1
+- Update to new upstream release 1.9.2
+
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Tue Aug 28 2018 Scott Talbert <swt@techie.net> - 1.9.0-4
+- Switch build to use cmake and include cmake files (#1587836)
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Fri Jun 29 2018 Scott Talbert <swt@techie.net> - 1.9.0-2
+- Remove ldconfig scriptlets (no longer needed on F28+)
+
+* Tue Mar 13 2018 Scott Talbert <swt@techie.net> - 1.9.0-1
+- New upstream release 1.9.0
+- Add subpackage for new Encodings component
+
+* Mon Feb 19 2018 Scott Talbert <swt@techie.net> - 1.8.1-3
+- Add missing BR for gcc-c++
+
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Scott Talbert <swt@techie.net> - 1.8.1-1
+- New upstream release 1.8.1
+- Remove patches that have been incorporated upstream
+
+* Thu Nov 16 2017 Scott Talbert <swt@techie.net> - 1.8.0.1-1
+- New upstream release 1.8.0.1
+
+* Tue Nov 14 2017 Scott Talbert <swt@techie.net> - 1.8.0-1
+- New upstream release 1.8.0
+
+* Wed Nov 08 2017 Scott Talbert <swt@techie.net> - 1.7.9p2-1
+- New upstream release 1.7.9p2
+
+* Fri Sep 22 2017 Scott Talbert <swt@techie.net> - 1.7.9-2
+- Switch from mysql-devel to mariadb-connector-c-devel (#1493654)
+
+* Tue Sep 12 2017 Scott Talbert <swt@techie.net> - 1.7.9-1
+- New upstream release 1.7.9
+
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.8p3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Wed Jun 28 2017 Scott Talbert <swt@techie.net> - 1.7.8p3-1
+- New upstream release 1.7.8p3
+
+* Thu May 25 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-3
+- Add patch from upstream to resolve s390x build failures
+
+* Tue May 23 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-2
+- Add openssl-devel as a dependency of poco-devel (#1454462)
+
+* Mon May 08 2017 Scott Talbert <swt@techie.net> - 1.7.8p2-1
+- New upstream release 1.7.8p2
+
+* Sun Feb 19 2017 Francis ANDRE <zosrothko@orange.fr> - 1.7.7-2
+- Add ignored-tests.patch to ignore failing tests on ppce and armv7hl
+
+* Sat Feb 18 2017 Scott Talbert <swt@techie.net> - 1.7.7-1
+- New upstream release 1.7.7
+
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
+* Thu Jun 23 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-5
+- Restore POCO_UNBUNDLED definition in Foundation/include/Poco/Config.h
+so that user's code compiles without having to define POCO_UNBUNDLED.
+
+* Wed Jun 22 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-4
+- Restore POCO_UNBUNDLED definition in Foundation/include/Poco/Config.h
+
+* Fri May 27 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
+- Restore removal of bundled sources
+
+* Thu May 26 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-3
+- Exclude Data/SQLite from testing.
+
+ Wed May 25 2016 Dan Horák <dan[at]danny.cz> - 1.7.3-2
+- conditionalize mongodb support
+
+* Sat May 14 2016 Francis ANDRE <zosrothko@orange.fr> - 1.7.3-1
+- New upstream release 1.7.3
+
+* Mon Mar 28 2016 Scott Talbert <swt@techie.net> - 1.7.2-1
+- New upstream release 1.7.2
+
+* Sun Mar 20 2016 Scott Talbert <swt@techie.net> - 1.7.1-1
+- New upstream release 1.7.1
+- Remove patches that have been incorporated upstream
+
+* Thu Feb 04 2016 Scott Talbert <swt@techie.net> - 1.6.1-2
+- Add patch for SQLite on EL7
+- Add patch for PPC64LE
+
+* Sat Jan 30 2016 Scott Talbert <swt@techie.net> - 1.6.1-1
+- New upstream release 1.6.1 (#917362)
+- Removed AArch64 patch as it has been incorporated upstream
+- Removed superfluous %%defattrs
+- Add patches to fix partial PCRE unbundling issues
+- Add patch to fix sample linking issues with JSON library
+- Enable running of tests in %%check
+- Add JSON and MongoDB subpackages
+
+* Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1.4.2p1-2.9
+- Rebuilt for GCC 5 C++11 ABI change
+
+* Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Tue Jul 08 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 1.4.2p1-2.7
+- Add support for AArch64
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Feb 10 2012 Petr Pisar <ppisar@redhat.com> - 1.4.2p1-2.2
+- Rebuild against PCRE 8.30
+
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2p1-2.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Sun Dec 18 2011 Dan Horák <dan@danny.cz> - 1.4.p1-2
+- build without tests on s390
+
+* Wed Sep 28 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.2p1-1
+- Updated for POCO 1.4.2p1. Obsoleted .spec directives were removed.
+
+* Wed Mar 23 2011 Dan Horák <dan@danny.cz> - 1.4.1p1-1.1
+- rebuilt for mysql 5.5.10 (soname bump in libmysqlclient)
+
+* Thu Feb 10 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.1p1-1
+- Updated for POCO 1.4.1p1.
+
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.1-1.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Tue Feb 01 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.1-1
+- Updated for POCO 1.4.1.
+
+* Fri Jan 21 2011 Maxim Udushlivy <udushlivy@mail.ru> - 1.4.0-1
+- Updated for POCO 1.4.0. The "syslibs" patch was removed.
+- This release enables a small part of the PCRE library to be 
+compiled-in, which is unavoidable since POCO uses some internal PCRE 
+functions for Unicode classification and manipulation.
+
+* Wed Jun 02 2010 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p2-2
+- Missing dependencies on system header files were fixed.
+- Options were added to build POCO without tests and samples.
+
+* Fri May 07 2010 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p2-1
+- The package was upgraded for the use of POCO version 1.3.6p2.
+
+* Wed Dec 23 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.6p1-1
+- The package was upgraded for the use of POCO version 1.3.6p1.
+- A new binary package (poco-pagecompiler) is now produced by the 
+rpmbuild process.
+- The syslibs patch was considerably simplified (based on a new 
+"configure" script option which was introduced by POCO developers for 
+the maintainers of the POCO Debian package).
+
+* Tue Nov 17 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-8
+- The "make" invocation command in the %%build section was modified to 
+skip premature symbol stripping from retail libraries.
+
+* Mon Nov 16 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-7
+- A removal of the "Foundation/src/MSG00001.bin" binary file was added 
+to the "%%prep" section.
+- Values for the top "Summary", "Group" and "%%description" were 
+restored.
+- A "BuildRoot" tag was added.
+
+* Fri Nov 13 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-6
+- The generation of the "poco" metapackage is now suppressed.
+- A comment for the patch was added.
+- The usage of %% symbol in the %%changelog section was fixed.
+
+* Wed Nov 11 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-5
+- A patch "poco-1.3.5-syslibs.patch" was added. The build process now 
+does not use bundled versions of the system libraries (zlib, pcre, 
+sqlite and expat).
+
+* Fri Nov 06 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-4
+- The name of "poco-testing" subpackage was reverted to "poco-debug".
+- The "Release" field was fixed to use "%%{?dist}".
+- The ".*DS_Store" files removal was moved to the %%prep section.
+- Fedora compilation flags (%%{optflags}) are now injected into the 
+"configure" script.
+
+* Wed Nov 04 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-3
+- Each POCO component is now put in its own binary package. The "poco" 
+package is now a meta package.
+- Option "-s" was removed from the "make" invocation commands.
+- "perl" was replaced by "sed" for string substitutions in Makefile's.
+
+* Tue Jun 23 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-2
+- The "poco-extra" subpackage was split into separate "poco-odbc", 
+"poco-mysql" and "poco-zip".
+- The "poco-debug" subpackage was renamed to "poco-testing".
+- The "poco-doc" subpackage with the API reference documentation 
+was added.
+
+* Sat Jun 20 2009 Maxim Udushlivy <udushlivy@mail.ru> - 1.3.5-1
+- The first version.
