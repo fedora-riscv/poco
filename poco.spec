@@ -1,9 +1,3 @@
-# https://github.com/pocoproject/poco/issues/3415
-# https://github.com/pocoproject/poco/issues/3516
-# https://github.com/pocoproject/poco/tree/poco-1.11.2
-%global commit      5a0b18246ba744389d7733631d4ee565ea6b3111
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global commitdate  20220328
 %global _bundled_pcre_version 8.45
 %global libversion 82
 
@@ -38,7 +32,7 @@ Summary:          C++ class libraries for network-centric applications
 License:          Boost
 URL:              https://pocoproject.org
 
-Source:           https://github.com/pocoproject/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:          https://github.com/pocoproject/%{name}/archive/%{name}-%{version}-release.tar.gz#/%{name}-%{version}.tar.gz
 
 # Disable the tests that will fail under Koji (mostly network)
 Patch0:           0001-Disable-tests-that-fail-in-koji.patch
@@ -70,7 +64,7 @@ POCO C++ Libraries are built strictly on standard ANSI/ISO C++,
 including the standard library.
 
 %prep
-%autosetup -p1 -n %{name}-%{commit}
+%autosetup -p1 -n %{name}-%{name}-%{version}-release
 
 # Fix libdir for Fedora
 /bin/sed -i.orig -e 's|$(INSTALLDIR)/lib\b|$(INSTALLDIR)/%{_lib}|g' Makefile
