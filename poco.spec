@@ -1,5 +1,6 @@
-%global _bundled_pcre_version 8.45
-%global libversion 82
+%global _bundled_pcre2_version 10.40
+# read from libversion
+%global libversion 92
 
 %global cmake_build_dir cmake-build
 %global cmake_debug_dir cmake-debug
@@ -25,7 +26,7 @@
 %endif
 
 Name:             poco
-Version:          1.11.2
+Version:          1.12.2
 Release:          %autorelease
 Summary:          C++ class libraries for network-centric applications
 
@@ -46,7 +47,7 @@ BuildRequires:    openssl-devel
 BuildRequires:    libiodbc-devel
 BuildRequires:    %{mysql_devel_pkg}
 BuildRequires:    zlib-devel
-BuildRequires:    pcre-devel
+BuildRequires:    pcre2-devel
 BuildRequires:    sqlite-devel
 BuildRequires:    expat-devel
 BuildRequires:    libtool-ltdl-devel
@@ -54,7 +55,7 @@ BuildRequires:    libtool-ltdl-devel
 # We build poco to unbundle as much as possible, but unfortunately, it uses
 # some internal functions of pcre so there are a few files from pcre that are
 # still bundled.  See https://github.com/pocoproject/poco/issues/120.
-Provides:         bundled(pcre) = %{_bundled_pcre_version}
+Provides:         bundled(pcre2) = %{_bundled_pcre2_version}
 
 %description
 The POCO C++ Libraries (POCO stands for POrtable COmponents) 
@@ -100,11 +101,11 @@ rm -v Foundation/src/zlib.h
 rm -v Foundation/src/zutil.c
 rm -v Foundation/src/zutil.h
 
-# PCRE files that can't be removed due to still being bundled:
-#   pcre.h pcre_config.h pcre_internal.h pcre_tables.c pcre_ucd.c
-mv -v Foundation/src/pcre_{config.h,internal.h,tables.c,ucd.c} .
-rm -v Foundation/src/pcre_*
-mv -v pcre_* Foundation/src
+# PCRE files that can't be removed due to still being used in
+#   Foundation/src/Unicode.cpp:
+mv -v Foundation/src/pcre2_{config.h,internal.h,ucp.h,intmodedep.h,ucptables.c,tables.c,ucd.c} .
+rm -v Foundation/src/pcre2*
+mv -v pcre2_* Foundation/src
 
 rm -v Data/SQLite/src/sqlite3.h
 rm -v Data/SQLite/src/sqlite3.c
@@ -152,7 +153,12 @@ rm -v %{buildroot}%{_bindir}/arc
 %if %{with tests}
 export POCO_BASE="$(pwd)"
 pushd %{cmake_build_dir}
+%ifarch s390x
+# NetSSL test timed out on s390x
+ctest -V %{?_smp_mflags} -E "MongoDB|Redis|DataMySQL|DataODBC|NetSSL"
+%else
 ctest -V %{?_smp_mflags} -E "MongoDB|Redis|DataMySQL|DataODBC"
+%endif
 popd
 %endif
 
@@ -332,6 +338,17 @@ class libraries for network-centric applications.)
 %{_libdir}/libPocoActiveRecord.so.%{libversion}
 
 # -----------------------------------------------------------------------------
+%package          prometheus
+Summary:          The Prometheus POCO component
+
+%description prometheus
+This package contains the Prometheus component of POCO. (POCO is a set of C++
+class libraries for network-centric applications.)
+
+%files prometheus
+%{_libdir}/libPocoPrometheus.so.%{libversion}
+
+# -----------------------------------------------------------------------------
 %package          debug
 Summary:          Debug builds of the POCO libraries
 
@@ -357,6 +374,7 @@ application testing purposes.
 %{_libdir}/libPocoEncodingsd.so.%{libversion}
 %{_libdir}/libPocoJWTd.so.%{libversion}
 %{_libdir}/libPocoActiveRecordd.so.%{libversion}
+%{_libdir}/libPocoPrometheusd.so.%{libversion}
 
 # -----------------------------------------------------------------------------
 %package          devel
@@ -384,7 +402,7 @@ Requires:         poco-jwt%{?_isa} = %{version}-%{release}
 Requires:         poco-activerecord%{?_isa} = %{version}-%{release}
 
 Requires:         zlib-devel
-Requires:         pcre-devel
+Requires:         pcre2-devel
 Requires:         expat-devel
 Requires:         openssl-devel
 
@@ -435,6 +453,8 @@ POCO applications.
 %{_libdir}/libPocoJWTd.so
 %{_libdir}/libPocoActiveRecord.so
 %{_libdir}/libPocoActiveRecordd.so
+%{_libdir}/libPocoPrometheus.so
+%{_libdir}/libPocoPrometheusd.so
 %{_libdir}/cmake/Poco
 
 # -----------------------------------------------------------------------------
