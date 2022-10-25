@@ -1,5 +1,15 @@
+From 25136270c5d6b8fa6c2238df640c812465aae1f4 Mon Sep 17 00:00:00 2001
+From: Scott Talbert <swt@techie.net>
+Date: Mon, 24 Oct 2022 21:21:31 -0500
+Subject: [PATCH 1/2] Fix XML compilation due to new methods being guarded by
+ XML_DTD
+
+---
+ XML/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/XML/CMakeLists.txt b/XML/CMakeLists.txt
-index 4fbf06f96..b997ec6c0 100644
+index 123657a0c..b99f4f376 100644
 --- a/XML/CMakeLists.txt
 +++ b/XML/CMakeLists.txt
 @@ -51,7 +51,7 @@ target_include_directories(XML
@@ -11,3 +21,6 @@ index 4fbf06f96..b997ec6c0 100644
  else()
  	if(WIN32)
  		#TODO: Is XML_STATIC only required with Windows? What does it do?
+-- 
+2.38.1
+
