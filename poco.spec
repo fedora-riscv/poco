@@ -18,7 +18,7 @@
 %endif
 
 Name:             poco
-Version:          1.12.3
+Version:          1.12.4
 Release:          %autorelease
 Summary:          C++ class libraries for network-centric applications
 
