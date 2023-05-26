@@ -10,6 +10,10 @@
 %bcond_without tests
 %endif
 
+%ifarch riscv64
+%global optflags %(echo %optflags -pthread)
+%endif
+
 %bcond_without samples
 
 # mongodb still available only on little endian arches
@@ -19,7 +23,7 @@
 
 Name:             poco
 Version:          1.12.4
-Release:          %autorelease
+Release:          %autorelease -e rv64
 Summary:          C++ class libraries for network-centric applications
 
 License:          BSL-1.0
